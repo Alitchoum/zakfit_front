@@ -29,9 +29,22 @@
 		CD38B1F12ED459C20085B2EA /* zakfitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = zakfitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CDF54D572ED7619E00204405 /* Exceptions for "zakfit" folder in "zakfit" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CD38B1D92ED459C10085B2EA /* zakfit */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CD38B1DC2ED459C10085B2EA /* zakfit */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CDF54D572ED7619E00204405 /* Exceptions for "zakfit" folder in "zakfit" target */,
+			);
 			path = zakfit;
 			sourceTree = "<group>";
 		};
@@ -43,6 +56,11 @@
 		CD38B1F42ED459C20085B2EA /* zakfitUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = zakfitUITests;
+			sourceTree = "<group>";
+		};
+		CDF54D582ED7623D00204405 /* Fonts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -79,6 +97,7 @@
 				CD38B1EA2ED459C20085B2EA /* zakfitTests */,
 				CD38B1F42ED459C20085B2EA /* zakfitUITests */,
 				CD38B1DB2ED459C10085B2EA /* Products */,
+				CDF54D582ED7623D00204405 /* Fonts */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,6 +128,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				CD38B1DC2ED459C10085B2EA /* zakfit */,
+				CDF54D582ED7623D00204405 /* Fonts */,
 			);
 			name = zakfit;
 			packageProductDependencies = (
@@ -400,6 +420,9 @@
 				DEVELOPMENT_TEAM = Z2SVQCV94Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = zakfit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -432,6 +455,9 @@
 				DEVELOPMENT_TEAM = Z2SVQCV94Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = zakfit/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

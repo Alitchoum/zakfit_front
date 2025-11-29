@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct zakfitApp: App {
+    
+    @State var appState = AppState()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppRootView()
+                .environment(appState)
         }
     }
 }
