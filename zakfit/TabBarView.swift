@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Observation
 
 struct TabBarView: View {
     

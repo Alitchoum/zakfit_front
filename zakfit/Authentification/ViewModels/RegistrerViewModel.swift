@@ -7,11 +7,9 @@
 
 import SwiftUI
 
-
-//RegistrerViewModel
-//→ S’occupe du formulaire d’inscription
-//→ Appelle ton API
-//→ Renvoie le user + token
+//-> S’occupe du formulaire d’inscription
+//-> Appelle API
+//-> Renvoie le user + token
 
 struct RegisterResponse: Codable {
     let user: User
@@ -19,7 +17,13 @@ struct RegisterResponse: Codable {
 }
 
 @Observable
-final class RegistrerViewModel {
+final class RegisterViewModel {
+    
+    var appState: AppState?
+    
+    init(appState: AppState? = nil) {
+        self.appState = appState
+    }
     
     var firstName = ""
     var lastName = ""
@@ -35,7 +39,7 @@ final class RegistrerViewModel {
     var receivedToken: String?
     
     // MARK: - Register
-
+    
     func register() async {
         guard validateFields() else { return }
         
@@ -113,4 +117,3 @@ final class RegistrerViewModel {
         }
     }
 }
-

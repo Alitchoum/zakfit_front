@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-//Role : S’occupe uniquement de parler avec ton API
-//→ login / getCurrentUser
+//-> Connexion avec API
+//-> login / getCurrentUser
 
-//RECUPERE USER VIA API
 struct LoginResponse: Codable {
     let token: String
     let user: User
@@ -74,7 +73,10 @@ final class UserService {
             )
         }
         
-        return try JSONDecoder().decode(LoginResponse.self, from: data)
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601 // date !!!!
+        let loginResponse = try decoder.decode(LoginResponse.self, from: data)
+        
+        return loginResponse
     }
-
 }
