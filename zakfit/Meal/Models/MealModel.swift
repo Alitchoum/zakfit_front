@@ -20,3 +20,7 @@ let arrayInfos = [
     MealModel(type: "Lipides", value: 5 ,color: .vert),
     MealModel(type: "Glucides", value: 15 ,color: .bleu),
 ]
+
+
+let colorArray: [Color] = [.vert, .bleu, .rose, .violet]
+

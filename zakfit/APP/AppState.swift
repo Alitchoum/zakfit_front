@@ -63,7 +63,6 @@ final class AppState {
         }
     }
     
-    // AJOUTEZ CETTE FONCTION
     func login(user: User, token: String, needsOnboarding: Bool = false) {
         self.user = user
         self.token = token

@@ -7,21 +7,10 @@
 
 import SwiftUI
 
-struct ModaleSportGoalView: View {
-    
-    @State private var ShowSheet = false
-   // @State private var frequence = ""
-    
+struct AddSportGoalView: View {
+        
     var body: some View {
-        VStack {
-            
-            Button(action: {
-                ShowSheet.toggle()
-            }) {
-                Text("SHEET PHYSCICAL GOAL")
-            }
-        }
-        .sheet(isPresented: $ShowSheet) {
+
             VStack (spacing: 15){
                 Rectangle()
                     .foregroundColor(.black)
@@ -119,12 +108,11 @@ struct ModaleSportGoalView: View {
                 Spacer()
             }
             .padding(.horizontal, 17)
-            .presentationDetents([.height(550)])
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.white)
-        }
     }
 }
 
 #Preview {
-    ModaleSportGoalView()
+    AddSportGoalView()
 }

@@ -10,13 +10,13 @@ import SwiftUI
 struct MealType: Identifiable {
     let id = UUID()
     var name: String
-    var image: String
+    var picto: String
     var color: Color
 }
 
-let MealArray = [
-    MealType(name: "Petit-déjeuner", image: "breakfast", color: .bleuC),
-    MealType(name: "Déjeuner", image: "dej", color: .vertC),
-    MealType(name: "Collation", image: "donut", color: .roseC),
-    MealType(name: "Dîner", image: "diner", color: .violetC)
+let MealTypeArray = [
+    MealType(name: "Petit-déjeuner", picto: "breakfast", color: .bleuC),
+    MealType(name: "Déjeuner", picto: "dej", color: .vertC),
+    MealType(name: "Collation", picto: "donut", color: .roseC),
+    MealType(name: "Dîner", picto: "diner", color: .violetC)
 ]

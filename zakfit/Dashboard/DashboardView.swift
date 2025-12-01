@@ -57,13 +57,11 @@ struct DashboardView: View {
                     .sheet(isPresented: $isShowingAddActivity){
                         AddActivityView()
                             .presentationDetents([.height(530)])
-                            .background(.white)
+                            
                     }
                     
                     //AJOUTER REPAS
-                    Button{
-                        isShowingAddLMeal.toggle()
-                    }label: {
+                    NavigationLink(destination : AddMealView()) {
                     ZStack{
                         Rectangle()
                             .foregroundColor(.vertC)
@@ -82,11 +80,10 @@ struct DashboardView: View {
                 }
                     .frame(maxWidth: .infinity)
                     .frame(height: 185)
-                    .sheet(isPresented: $isShowingAddLMeal){
-                        AddMealView()
-                            .presentationDetents([.height(500)])
-                            .background(.white)
-                    }
+//                    .sheet(isPresented: $isShowingAddLMeal){
+//                        AddMealView()
+//                            .presentationDetents([.height(480)])
+//                    }
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 185)

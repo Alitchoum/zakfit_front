@@ -9,19 +9,10 @@ import SwiftUI
 
 struct AddNutriGoalView: View {
     
-    @State private var ShowSheet = false
     let Array = infosArray
     
     var body: some View {
-        VStack {
-            
-            Button(action: {
-                ShowSheet.toggle()
-            }) {
-                Text("SHEET NUTRITION GOAL")
-            }
-        }
-        .sheet(isPresented: $ShowSheet) {
+
             VStack {
                 Rectangle()
                     .foregroundColor(.black)
@@ -81,9 +72,8 @@ struct AddNutriGoalView: View {
                 Spacer()
             }
             .padding(.horizontal, 17)
-            .presentationDetents([.height(670)])
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.white)
-        }
     }
 }
 

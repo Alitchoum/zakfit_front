@@ -10,6 +10,8 @@ import SwiftUI
 struct ProfilView: View {
     
     @Environment(AppState.self) var appState
+    @State private var isShowingAddNutri = false
+    @State private var isShowingAddPhysical = false
     
     var userInfos: [InfosItem] {
         let user = appState.user
@@ -68,37 +70,59 @@ struct ProfilView: View {
             
             Text("Nutrition")
                 .font(.custom("Parkinsans-Medium", size:20))
-            //BLOC AJOUTER NUTRI GOAL
-            ZStack{
-                Rectangle()
-                    .frame(width: 368, height: 112)
-                    .foregroundColor(.gris)
-                    .cornerRadius(15)
-                HStack(spacing:35){
-                    Image("plus")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                    Text("Ajouter objectif nutritionnel")
-                        .font(.custom("Parkinsans-Medium", size:16))
+            
+            //BLOC NUTRI GOAL
+            Button {
+                isShowingAddNutri.toggle()
+            } label: {
+                ZStack{
+                    Rectangle()
+                        .frame(width: 368, height: 112)
+                        .foregroundColor(.gris)
+                        .cornerRadius(15)
+                    HStack(spacing:35){
+                        Image("plus")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                        Text("Ajouter objectif nutritionnel")
+                            .font(.custom("Parkinsans-Medium", size:16))
+                            .foregroundColor(.black)
+                    }
+                    
                 }
-                
             }
+            .sheet(isPresented: $isShowingAddNutri){
+                AddNutriGoalView()
+                    .presentationDetents([.height(670)])
+            }
+            
             Text("Activités physiques")
                 .font(.custom("Parkinsans-Medium", size:20))
-            //BLOC AJOUTER PHYSICAL GOAL
-            ZStack{
-                Rectangle()
-                    .frame(width: 368, height: 112)
-                    .foregroundColor(.gris)
-                    .cornerRadius(15)
-                HStack(spacing:35){
-                    Image("plus")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                    Text("Ajouter objectif pysique")
-                        .font(.custom("Parkinsans-Medium", size:16))
+                .foregroundColor(.black)
+            
+            //AJOUTER PHYSICAL GOAL
+            Button {
+                isShowingAddPhysical.toggle()
+            }label: {
+                ZStack{
+                    Rectangle()
+                        .frame(width: 368, height: 112)
+                        .foregroundColor(.gris)
+                        .cornerRadius(15)
+                    HStack(spacing:35){
+                        Image("plus")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                        Text("Ajouter objectif pysique")
+                            .font(.custom("Parkinsans-Medium", size:16))
+                            .foregroundColor(.black)
+                    }
+                    
                 }
-                
+            }
+            .sheet(isPresented: $isShowingAddPhysical){
+                AddSportGoalView()
+                    .presentationDetents([.height(550)])
             }
             Spacer()
         }

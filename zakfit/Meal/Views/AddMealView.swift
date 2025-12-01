@@ -6,95 +6,51 @@
 //
 
 import SwiftUI
+struct AddMealView: View {
 
-struct AddMealView : View {
+    let array = MealTypeArray
     
-    @State var selectedMeal = ""
-    
-    let mealArray = MealArray
+    private let columns = [
+        GridItem(.flexible(), spacing: 12),
+        GridItem(.flexible(), spacing: 12)
+    ]
     
     var body: some View {
-        VStack {
-            
+        NavigationStack {
             VStack {
-                Rectangle()
-                    .foregroundColor(.black)
-                    .cornerRadius(15)
-                    .frame(width: 50, height: 6)
-                    .padding(.bottom, 30)
-                    .padding(.top, 20)
                 
                 Text("Ajouter un repas")
                     .font(.custom("Parkinsans-SemiBold", size: 25))
-                    .padding(.bottom, 30)
+                    .padding(.bottom, 50)
                 
-                VStack(spacing:8){
-                    //LIGNE 1
-                    HStack{
-                        //BREAKFAST
-                        ZStack{
-                            Rectangle()
-                                .foregroundColor(mealArray[0].color)
-                                .cornerRadius(15)
-                                .frame( height: 160)
-                            VStack(spacing: 20){
-                                Image(mealArray[0].image)
-                                    .resizable()
-                                    .frame(width: 64, height: 64)
-                                Text(mealArray[0].name)
-                                    .font(.custom("Parkinsans-Medium", size: 17))
-                            }
-                        }
-                        //DEJEUNER
-                        ZStack{
-                            Rectangle()
-                                .foregroundColor(mealArray[1].color)
-                                .cornerRadius(15)
-                                .frame( height: 160)
-                            VStack(spacing: 20){
-                                Image(mealArray[1].image)
-                                    .resizable()
-                                    .frame(width: 64, height: 64)
-                                Text(mealArray[1].name)
-                                    .font(.custom("Parkinsans-Medium", size: 17))
-                            }
-                        }
-                    }
-                    //LIGNE 2
-                    HStack{
-                        //COLLATION
-                        ZStack{
-                            Rectangle()
-                                .foregroundColor(mealArray[2].color)
-                                .cornerRadius(15)
-                                .frame( height: 160)
-                            VStack(spacing: 20){
-                                Image(mealArray[2].image)
-                                    .resizable()
-                                    .frame(width: 64, height: 64)
-                                Text(mealArray[2].name)
-                                    .font(.custom("Parkinsans-Medium", size: 17))
-                            }
-                        }
-                        //DINER
-                        ZStack{
-                            Rectangle()
-                                .foregroundColor(mealArray[3].color)
-                                .cornerRadius(15)
-                                .frame( height: 160)
-                            VStack(spacing: 20){
-                                Image(mealArray[3].image)
-                                    .resizable()
-                                    .frame(width: 64, height: 64)
-                                Text(mealArray[3].name)
-                                    .font(.custom("Parkinsans-Medium", size: 17))
+                LazyVGrid(columns: columns, spacing: 12) {
+                    ForEach(array) { type in
+                        
+                        NavigationLink(destination: MealView(selectedMealType: type)) {
+                            ZStack {
+                                Rectangle()
+                                    .foregroundColor(type.color)
+                                    .cornerRadius(15)
+                                    .frame(height: 200)
+                                
+                                VStack(spacing: 30) {
+                                    Image(type.picto)
+                                        .resizable()
+                                        .frame(width: 64, height: 64)
+                                    
+                                    Text(type.name)
+                                        .font(.custom("Parkinsans-Medium", size: 18))
+                                        .foregroundColor(.black)
+                                }
                             }
                         }
                     }
                 }
-                Spacer()
+                .padding(.horizontal, 18)
+                //Spacer()
             }
-            .padding(.horizontal, 17)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+           .background(.white)
         }
     }
 }
