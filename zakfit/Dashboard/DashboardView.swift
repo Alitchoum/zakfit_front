@@ -61,7 +61,7 @@ struct DashboardView: View {
                     }
                     
                     //AJOUTER REPAS
-                    NavigationLink(destination : AddMealView()) {
+                    NavigationLink(destination : AddMealTypeView()) {
                     ZStack{
                         Rectangle()
                             .foregroundColor(.vertC)

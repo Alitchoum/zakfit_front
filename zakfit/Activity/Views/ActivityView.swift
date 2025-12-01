@@ -70,7 +70,7 @@ struct ActivityView: View {
                 guard let token = appState.token else {
                     return print("Error token")
                 }
-                await viewModel.fetchCActivities(token:token)
+                await viewModel.fetchActivities(token:token)
             }
         }
     }

@@ -62,7 +62,7 @@ final class ActivityViewModel {
     }
     
     // ACTIVITY RESPONSE (USER)
-    func fetchCActivities(token: String) async {
+    func fetchActivities(token: String) async {
         guard let url = URL(string: "http://127.0.0.1:8080/activities/current") else { return }
         
         var request = URLRequest(url: url)

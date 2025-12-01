@@ -13,7 +13,9 @@ struct AddFoodInMeal: View {
     @State var selectedCategoryID: UUID? = nil
     @State var search: String = ""
     @State var showAddUserFood: Bool = false
+    
     let colors = colorArray
+    var mealID: UUID
     
     var body: some View {
         VStack(alignment: .leading, spacing: 15){
@@ -109,5 +111,5 @@ struct AddFoodInMeal: View {
 }
 
 #Preview {
-    AddFoodInMeal()
+    AddFoodInMeal(mealID: UUID())
 }

@@ -9,24 +9,39 @@ import SwiftUI
 
 struct MealView: View {
     
+    @Environment(AppState.self) private var appState
+    @State var viewModel = MealViewModel()
     let textArray = arrayInfos
-    var selectedMealType: MealType? = nil
+    var mealType: MealType? = nil
+    
+    @State private var createdMeal: MealResponseDTO? = nil  // Meal créé côté backend
     
     var body: some View {
         NavigationStack{
-            VStack{
-                Text("Dîner")
-                    .font(.custom("Parkinsans-SemiBold", size: 24))
+            VStack( spacing: 30){
                 
-                ZStack{
+                //TYPE REPAS
+                if let meal = mealType {
+                    Text(meal.name)
+                        .font(.custom("Parkinsans-SemiBold", size: 25))
+                        .padding(.top, 20)
+                } else {
+                    Text("Vide")
+                        .font(.custom("Parkinsans-SemiBold", size: 25))
+                        .padding(.top, 20)
+                }
+                
+                //PICTO PHOTO
+                ZStack(alignment: .bottomTrailing){
                     Rectangle()
                         .ignoresSafeArea()
                         .foregroundColor(.gray)
-                        .frame(height: 295)
+                        .frame(height: 285)
                     VStack{
                         Image("photo")
                             .resizable()
                             .frame(width: 35, height: 35)
+                            .padding(20)
                     }
                 }
                 VStack(alignment: .leading, spacing: 20){
@@ -47,17 +62,37 @@ struct MealView: View {
                         }
                     }
                     
+                    //ADD FOODS
                     HStack{
                         Text("Produits alimentaires")
                             .font(.custom("Parkinsans-Medium", size: 20))
                         Spacer()
-                        NavigationLink(destination: AddFoodInMeal()){
-                            Image("plus")
-                            
+                        
+                        if let mealID = createdMeal?.id {  // Passer l'ID du meal créé à AddFoodInMeal
+                            NavigationLink(destination: AddFoodInMeal(mealID: mealID)){
+                                Image("plus")
+                                
+                            }
                         }
                     }
+                    
+                    //LISTES DES ALIMENTS AJOUTÉS ICI
+                    
                 }
                 .padding(.horizontal, 17)
+                Spacer()
+            }
+            .onAppear {
+                Task {
+                    guard let token = appState.token,
+                          let type = mealType?.name
+                    else { return print("Error missing data") }
+                    
+                    // Crée le meal et récupère la réponse
+                    if let meal = await viewModel.sendCreateMeal(token: token, type: type) {
+                        self.createdMeal = meal
+                    }
+                }
             }
         }
     }

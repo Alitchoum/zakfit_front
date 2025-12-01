@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-struct AddMealView: View {
+
+struct AddMealTypeView: View {
 
     let array = MealTypeArray
     
@@ -26,7 +27,7 @@ struct AddMealView: View {
                 LazyVGrid(columns: columns, spacing: 12) {
                     ForEach(array) { type in
                         
-                        NavigationLink(destination: MealView(selectedMealType: type)) {
+                        NavigationLink(destination: MealView(mealType: type)) {
                             ZStack {
                                 Rectangle()
                                     .foregroundColor(type.color)
@@ -56,6 +57,6 @@ struct AddMealView: View {
 }
 
 #Preview {
-    AddMealView()
+    AddMealTypeView()
 }
 

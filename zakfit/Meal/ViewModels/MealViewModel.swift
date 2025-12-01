@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct Meal: Codable {
+struct MealResponseDTO: Codable {
+    var id: UUID?
     var type: String
-    var image: String?
-    var picto : String
-    var totalCalories : Double
-    var totalCarbs : Double
-    var totalProteins : Double
-    var totalFats : Double
-    var date : Date
+    var totalCalories: Double
+    var totalCarbs: Double
+    var totalProteins: Double
+    var totalFats: Double
+    var date: Date
+    var userId: UUID
 }
 
 struct FoodCategoriesResponse: Identifiable, Codable {
@@ -26,7 +26,6 @@ struct FoodCategoriesResponse: Identifiable, Codable {
 
 struct CreateMealDTO: Codable {
         let type: String
-        let image: String?
         let date: Date
 }
 
@@ -51,18 +50,22 @@ struct FoodResponse: Codable, Identifiable {
     let foodCategoryID: UUID
 }
 
+struct AddFoodToMealDTO: Codable {
+    let foodID: UUID
+    let quantity: Int
+}
+
 @Observable
 final class MealViewModel {
     
     var foodCategories : [FoodCategoriesResponse] = []
     var foods: [FoodResponse] = []
-    //var meals: [] = []
-    //var foodMeals: [] = []
+    var meals: [MealResponseDTO] = []
     
     //var searchText = ""
     
     
-    //FETCH CATEGORIES FOOD
+    //LOAD CATEGORIES FOOD
     func fetchFoodCategories() async {
         guard let url = URL(string: "http://127.0.0.1:8080/foodCategories") else { return }
         
@@ -109,7 +112,7 @@ final class MealViewModel {
         }
     }
     
-    //FETCH ALL FOODS USER + ADMIN
+    //LOAD ALL FOODS USER + ADMIN
     func fetchAllFoods(token: String) async {
         
         guard let url = URL(string: "http://127.0.0.1:8080/foods/current") else { return }
@@ -131,35 +134,47 @@ final class MealViewModel {
     }
     
     //SEND CREATE MEAL
-    func sendCreateMeal(token: String, type: String, image: String?, date: Date) async {
-        guard let url = URL(string: "http://127.0.0.1:8080/meals/current") else { return }
-        
+    @MainActor
+    func sendCreateMeal(token: String, type: String) async -> MealResponseDTO? {
+        guard let url = URL(string: "http://127.0.0.1:8080/meals/current") else { return nil }
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         let newMeal = CreateMealDTO(
-            type : type,
-            image: image,
+            type: type,
             date: Date()
         )
-        
+
         do {
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
-            request.httpBody = try? encoder.encode(newMeal)
-            let (_, Response) = try await URLSession.shared.data(for: request)
-            if let httpResponse = Response as? HTTPURLResponse {
-                if (200...299).contains(httpResponse.statusCode) {
-                    print("Success: Meal is created.")
-                } else {
-                    print("Error status code: \(httpResponse.statusCode)")
-                }
+            request.httpBody = try encoder.encode(newMeal)
+
+            let (data, response) = try await URLSession.shared.data(for: request)
+            if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .iso8601
+                let createdMeal = try decoder.decode(MealResponseDTO.self, from: data)
+                print("Meal created: \(createdMeal)")
+                return createdMeal
+            } else {
+                print("Error status code: \((response as? HTTPURLResponse)?.statusCode ?? 0)")
+                return nil
             }
+
         } catch {
-            print("Error: decoding data (Meals response): \(error)")
+            print("Error creating meal: \(error)")
+            return nil
         }
+    }
+
+    
+    //FETCH ADD FOODS TO USER MEAL
+    func addFoodToMeal(token: String, mealID: UUID, foodID: UUID, quantity: Int) async{
+        
     }
     
     //AJOUTER LE GET POUR AFFICHER LES FOODS + LOGIQUE SEARCH
