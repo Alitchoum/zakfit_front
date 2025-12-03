@@ -17,7 +17,7 @@ struct LoginResponse: Codable {
 
 final class UserService {
     
-    //Recupere l'utilisateur connecté depuis API
+    //Recupere l'user connecté
     static func getCurrentUser(token: String) async throws -> User {
         guard let url = URL(string: "http://127.0.0.1:8080/users/profile") else {
             throw URLError(.badURL)

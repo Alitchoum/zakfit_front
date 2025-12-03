@@ -24,5 +24,4 @@ struct User : Codable {
         let ageComponents = calendar.dateComponents([.year], from: birthday, to: Date())
         return ageComponents.year
     }
-    //AJOUTER PROPRIÉTÉ CALCULER POUR AGE
 }

@@ -20,16 +20,10 @@ struct AddActivityView : View {
         
     var body: some View {
         VStack (spacing: 15){
-            Rectangle()
-                .foregroundColor(.black)
-                .cornerRadius(15)
-                .frame(width: 50, height: 6)
-                .padding(.bottom, 30)
-                .padding(.top, 20)
-            
             Text("Ajouter une activité")
                 .font(.custom("Parkinsans-SemiBold", size: 25))
                 .padding(.bottom, 20)
+                .padding(.top, 30)
             
             HStack {
                 Text("Type d’activité")
@@ -104,7 +98,7 @@ struct AddActivityView : View {
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
                 .padding(.horizontal, 17)
-                .keyboardType(.numberPad) //Ajouter un check int pas utile ? ajouter pareil dans onBoarding
+                .keyboardType(.numberPad) 
             
             //BUTTON
             Button{
@@ -131,6 +125,7 @@ struct AddActivityView : View {
                 }
                 .frame(height: 50)
                 .padding(.horizontal, 17)
+                .padding(.top, 20)
             }
             .alert("Activité ajoutée avec succès!", isPresented: $showAlert) {
                 Button("OK", role: .cancel) {
@@ -145,7 +140,7 @@ struct AddActivityView : View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
+        .background(.white)
     }
 }
 

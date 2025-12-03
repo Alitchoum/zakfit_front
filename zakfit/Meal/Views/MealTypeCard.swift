@@ -10,6 +10,7 @@ import SwiftUI
 struct MealTypeCard: View {
     
     let type: MealType
+    var onMealSaved: (() -> Void)? = nil
     
     var body: some View {
         ZStack {

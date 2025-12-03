@@ -57,7 +57,7 @@ struct ActivityView: View {
             
             //ACTIVITIES LIST
             ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 15) {
+                VStack(spacing: 10) {
                     ForEach(viewModel.activities) { activity in
                         CardView(activity: activity)
                     }

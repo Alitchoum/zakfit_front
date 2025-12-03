@@ -22,7 +22,7 @@ struct TabBarView: View {
                     }
                     .tag(0)
                 
-            NavigationStack { MealView() }
+            NavigationStack { MyMealsView() }
                     .tabItem {
                         Image(selectedTab == 1 ? "carrot-fill" : "carrot")
                         Text("Repas")

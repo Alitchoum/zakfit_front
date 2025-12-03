@@ -16,6 +16,6 @@ struct ModaleNutriGoalModel: Identifiable{
 }
 
 let infosArray: [ModaleNutriGoalModel] = [
-    ModaleNutriGoalModel(title: "Calcul automatique", description: "is a long established fact that a reader will be distracted.", buttonText:"Lancer" , color: .vert),
-    ModaleNutriGoalModel(title: "Programme personnaliser", description: "is a long established fact that a reader will be distracted.", buttonText:"Personnaliser" , color: .violet)
+    ModaleNutriGoalModel(title: "Calcul automatique", description: "Estimation de vos besoins caloriques journaliers selon votre objectif.", buttonText:"Lancer" , color: .vert),
+    ModaleNutriGoalModel(title: "Programme personnaliser", description: "Créez un plan nutritionnel sur-mesure en définissant vos calories et vos macros.", buttonText:"Personnaliser" , color: .violet)
 ]

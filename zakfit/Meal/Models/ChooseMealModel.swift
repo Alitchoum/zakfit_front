@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MealType: Identifiable {
+struct MealType: Identifiable, Equatable {
     let id = UUID()
     var name: String
     var picto: String

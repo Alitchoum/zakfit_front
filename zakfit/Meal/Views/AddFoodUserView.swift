@@ -21,22 +21,17 @@ struct AddFoodUserView : View {
     @State private var fatsText = ""
     @State private var proteinsText = ""
     
+    @State private var messageError = ""
     @State private var showAlert = false
     
     let colors = colorArray
     
     var body: some View {
         VStack (spacing: 15){
-            Rectangle()
-                .foregroundColor(.black)
-                .cornerRadius(15)
-                .frame(width: 50, height: 6)
-                .padding(.bottom, 30)
-                .padding(.top, 20)
-            
-            Text("Ajouter une produit")
+            Text("Aliment personnalisé")
                 .font(.custom("Parkinsans-SemiBold", size: 25))
                 .padding(.bottom, 20)
+                .padding(.top, 50)
             
             HStack {
                 Text("Catégories aliments")
@@ -101,7 +96,6 @@ struct AddFoodUserView : View {
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
                 .padding(.horizontal, 17)
-                .keyboardType(.numberPad)
                 .padding(.bottom, 15)
             
             //Nutriments
@@ -142,8 +136,8 @@ struct AddFoodUserView : View {
                 .cornerRadius(15)
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
-                .padding(.horizontal, 17)
                 .keyboardType(.numberPad)
+                .padding(.horizontal, 17)
             
             //PROTEINS
             TextField("Proteines / 100g", text: $proteinsText)
@@ -153,25 +147,37 @@ struct AddFoodUserView : View {
                 .cornerRadius(15)
                 .disableAutocorrection(true)
                 .textInputAutocapitalization(.never)
-                .padding(.horizontal, 17)
                 .keyboardType(.numberPad)
+                .padding(.horizontal, 17)
+            
+            //ALERTE MESSAGE
+            Text(messageError)
+                .foregroundColor(.red)
+                .font(.system(size: 16))
             
             //BUTTON
-            Button{
-                guard let token = appState.token,
-                      let name = nameText.isEmpty ? nil : nameText,
-                      let calories100g = Double(caloriesText),
-                      let carbs100g = Double(carbsText),
-                      let fats100g = Double(fatsText),
-                      let proteins100g = Double(proteinsText),
-                      let selectedCategoryID
-                else {
-                    return print("Error missing datas")
+            Button {
+                if let error = validateFields() {
+                    messageError = error
+                    return
                 }
                 
-                //SEND VERS API
-                Task{
-                    await viewModel.sendUserFood(token: token, name: name, calories100g: calories100g, carbs100g: carbs100g, fats100g: fats100g, proteins100g: proteins100g, foodCategoryID: selectedCategoryID)
+                let calories100g = Double(caloriesText)!
+                let carbs100g = Double(carbsText)!
+                let fats100g = Double(fatsText)!
+                let proteins100g = Double(proteinsText)!
+                
+                Task {
+                    await viewModel.sendUserFood(
+                        token: appState.token!,
+                        name: nameText,
+                        calories100g: calories100g,
+                        carbs100g: carbs100g,
+                        fats100g: fats100g,
+                        proteins100g: proteins100g,
+                        foodCategoryID: selectedCategoryID!
+                    )
+                    showAlert = true
                 }
             }label:{
                 ZStack{
@@ -184,13 +190,11 @@ struct AddFoodUserView : View {
                 }
                 .frame(height: 50)
                 .padding(.horizontal, 17)
-                .padding(.top, 12)
-            }
-            .alert("Aliment ajouté avec succès!", isPresented: $showAlert) {
-                Button("OK", role: .cancel) {
-                    dismiss()
+                .alert("Aliment ajouté avec succès!", isPresented: $showAlert) {
+                    Button("OK", role: .cancel) {
+                        dismiss()
+                    }
                 }
-                Spacer()
             }
             //APPEL API -> AFFICHAGE CATEGORIES
             .onAppear {
@@ -201,6 +205,26 @@ struct AddFoodUserView : View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.white)
+    }
+    
+    //MARK: - FONCTION
+    func validateFields() -> String? {
+        
+        //VERIF CAT SELECTIONNÉE
+        guard let selectedCategoryID else { return "Veuillez sélectionner une catégorie" }
+        
+        //VERIF NAME
+        if nameText.isEmpty {
+            return "Veuillez entrer le nom de l’aliment"
+        }
+        
+        //VERIF TEXFIELDS
+        guard Double(caloriesText) != nil else { return "Veuillez entrer les calories" }
+        guard Double(carbsText) != nil else { return "Veuillez entrer les glucides" }
+        guard Double(fatsText) != nil else { return "Veuillez entrer les lipides" }
+        guard Double(proteinsText) != nil else { return "Veuillez entrer les protéines" }
+        
+        return nil
     }
 }
 

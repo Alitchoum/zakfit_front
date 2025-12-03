@@ -21,6 +21,5 @@ let arrayInfos = [
     MealModel(type: "Glucides", value: 15 ,color: .bleu),
 ]
 
-
 let colorArray: [Color] = [.vert, .bleu, .rose, .violet]
 

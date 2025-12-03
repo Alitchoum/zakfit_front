@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ObjectiveView: View {
     
-    let textArray = ["Perdre du poids", "Prendre du muscles", "Maintenir mon poids actuel", "Prendre du poids"]
+    let textArray = ["Perdre du poids", "Prendre du muscle", "Maintenir mon poids"]
     @State var viewModel : OnboardingViewModel
     
     var body: some View {

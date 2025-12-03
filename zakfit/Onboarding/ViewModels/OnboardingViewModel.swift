@@ -54,7 +54,7 @@ final class OnboardingViewModel {
     func okForNext(current: Int) -> Bool {
         switch currentPage {
         case 0:
-            return birthday != Date()
+            return birthday < Date()
         case 1:
             return size > 100 && size < 300 && weight > 0 && weight < 300
         case 2:
@@ -75,11 +75,11 @@ final class OnboardingViewModel {
         case 1:
             return "Veuillez saisir des valeurs valides"
         case 2:
-            return "Veuillez saisir un genre"
+            return "Veuillez  sélectionner un genre"
         case 3:
-            return "Veuillez saisir un objectif"
+            return "Veuillez  sélectionner un objectif"
         case 4:
-            return "Veuillez saisir un regime alimentaire"
+            return "Veuillez sélectionner un regime alimentaire"
         default :
             return ""
         }

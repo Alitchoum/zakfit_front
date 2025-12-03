@@ -17,11 +17,18 @@ struct MonthView: View {
     let array = arrayMonth
 
        var body: some View {
-           VStack {
+           
+           VStack (alignment: .center){
+               Text("Mois en cours")
+                   .font(.custom("Parkinsans-Medium", size: 25))
+                   .padding(.bottom, 20)
+           }
+           VStack (alignment: .leading){
                Text("Récap du mois ")
                    .font(.custom("Parkinsans-Medium", size: 25))
                    .padding(.bottom, 20)
 
+               //GRILLE RECAP
                LazyVGrid(columns: columns, spacing: 10) {
                    ForEach(array) { item in
                        ZStack{

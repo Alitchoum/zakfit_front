@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-//-> Gere état global (token, user, onboarding, login/logout)
+//-> Etat global (token, user, onboarding, login/logout)
 
 @Observable
 final class AppState {

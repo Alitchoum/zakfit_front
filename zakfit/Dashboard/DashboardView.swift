@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct DashboardView: View {
-    
     @State private var isShowingAddActivity = false
-    @State private var isShowingAddLMeal = false
+    @State private var isShowingAddMeal = false 
     
     var body: some View {
-        NavigationStack{
-            
-            VStack(alignment: .leading){
+        NavigationStack {
+            VStack(alignment: .leading) {
                 Text("Dashboard")
                     .font(.custom("Parkinsans-SemiBold", size: 24))
                     .padding(.bottom, 40)
+                    .padding(.top, 10)
                 
                 Text("Progression")
                     .font(.custom("Parkinsans-Medium", size: 20))
@@ -32,17 +31,16 @@ struct DashboardView: View {
                 Text("Mes tâches")
                     .font(.custom("Parkinsans-Medium", size: 20))
                 
-                HStack{
-                    //AJOUTER ACTIVITÉ
-                    Button{
+                HStack {
+                    // AJOUTER ACTIVITÉ
+                    Button {
                         isShowingAddActivity.toggle()
                     } label: {
-                        
-                        ZStack{
+                        ZStack {
                             Rectangle()
                                 .foregroundColor(.bleuC)
                                 .cornerRadius(15)
-                            VStack(alignment: .center, spacing: 10){
+                            VStack(alignment: .center, spacing: 10) {
                                 Image("activity")
                                     .resizable()
                                     .frame(width: 70, height: 70)
@@ -54,49 +52,50 @@ struct DashboardView: View {
                             }
                         }
                     }
-                    .sheet(isPresented: $isShowingAddActivity){
-                        AddActivityView()
-                            .presentationDetents([.height(530)])
-                            
-                    }
-                    
-                    //AJOUTER REPAS
-                    NavigationLink(destination : AddMealTypeView()) {
-                    ZStack{
-                        Rectangle()
-                            .foregroundColor(.vertC)
-                            .cornerRadius(15)
-                        VStack(alignment: .center, spacing: 10){
-                            Image("dej")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                            Text("Ajouter un\nrepas")
-                                .font(.custom("Parkinsans-SemiBold", size: 16))
-                                .foregroundColor(.black)
-                                .multilineTextAlignment(.center)
-                                .padding(10)
-                        }
-                    }
-                }
                     .frame(maxWidth: .infinity)
                     .frame(height: 185)
-//                    .sheet(isPresented: $isShowingAddLMeal){
-//                        AddMealView()
-//                            .presentationDetents([.height(480)])
-//                    }
+                    .sheet(isPresented: $isShowingAddActivity) {
+                        AddActivityView()
+                            .presentationDetents([.height(530)])
+                            .presentationDragIndicator(.visible)
+                    }
+                    
+                    // AJOUTER REPAS - MAINTENANT EN MODALE
+                    Button {
+                        isShowingAddMeal.toggle()
+                    } label: {
+                        ZStack {
+                            Rectangle()
+                                .foregroundColor(.vertC)
+                                .cornerRadius(15)
+                            VStack(alignment: .center, spacing: 10) {
+                                Image("dej")
+                                    .resizable()
+                                    .frame(width: 60, height: 60)
+                                Text("Ajouter un\nrepas")
+                                    .font(.custom("Parkinsans-SemiBold", size: 16))
+                                    .foregroundColor(.black)
+                                    .multilineTextAlignment(.center)
+                                    .padding(10)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 185)
+                    .fullScreenCover(isPresented: $isShowingAddMeal) {
+                        AddMealTypeView()
+                    }
                 }
-                .frame(maxWidth: .infinity)
-                .frame(height: 185)
                 
-                //VOIR HISTORIQUE
-                NavigationLink(destination: PickerView()){
-                    ZStack{
+                // VOIR HISTORIQUE
+                NavigationLink(destination: PickerView()) {
+                    ZStack {
                         Rectangle()
                             .frame(maxWidth: .infinity)
                             .frame(height: 170)
                             .cornerRadius(15)
                             .foregroundColor(.violetC)
-                        HStack(alignment: .center, spacing: 20){
+                        HStack(alignment: .center, spacing: 20) {
                             Image("stats")
                                 .resizable()
                                 .frame(width: 60, height: 60)
@@ -118,4 +117,5 @@ struct DashboardView: View {
 
 #Preview {
     DashboardView()
+        .environment(AppState())
 }

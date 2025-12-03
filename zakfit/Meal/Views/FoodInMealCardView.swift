@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct FoodCardView: View {
+struct FoodInMealCardView: View {
+    
+    var food: FoodInMealResponse
     
     var body: some View {
         ZStack {
@@ -16,10 +18,10 @@ struct FoodCardView: View {
                 .cornerRadius(15)
             VStack(alignment: .leading){
                 
-                Text("Banane")
-                    .font(.custom("Parkinsans-SemiBold", size: 16))
+                Text(food.name)
+                    .font(.custom("Parkinsans-SemiBold", size: 17))
                 
-                Text("Quantié 100g")
+                Text("Quantité : \(food.quantity)g")
                     .foregroundColor(.gray)
                     .padding(.bottom, 20)
                 
@@ -29,7 +31,7 @@ struct FoodCardView: View {
                         Circle()
                             .frame(width: 20, height: 20)
                             .foregroundColor(.violet)
-                        Text("100cals")
+                        Text("\(String(format: "%.0f", food.proteins))Kcls")
                     }
                     
                     //Proteins
@@ -37,35 +39,41 @@ struct FoodCardView: View {
                         Circle()
                             .frame(width: 20, height: 20)
                             .foregroundColor(.rose)
-                        Text("100g")
+                        Text("\(String(format: "%.0f", food.proteins))g")
                     }
-                    
-                    //Lipides : fats
+                    //Lipides = fats
                     HStack{
                         Circle()
                             .frame(width: 20, height: 20)
                             .foregroundColor(.vert)
-                        Text("100g")
+                        Text("\(String(format: "%.0f",food.fats))g")
                     }
                     
-                    //Glucides : carbs
+                    //Glucides = carbs
                     HStack{
                         Circle()
                             .frame(width: 20, height: 20)
                             .foregroundColor(.bleu)
-                        Text("100g")
+                        Text("\(String(format: "%.0f", food.carbs))g")
                     }
                 }
-                    
             }
         }
         .frame(maxWidth: .infinity)
         .frame(height: 130)
-        .padding(.horizontal, 17)
     }
 }
 
-
 #Preview {
-    FoodCardView()
+    FoodInMealCardView(food: FoodInMealResponse(
+        id: UUID(),
+        name: "Banane",
+        quantity: 67,
+        calories: 400,
+        carbs: 446,
+        proteins: 443,
+        fats: 142,
+    ))
 }
+
+

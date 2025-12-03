@@ -9,74 +9,102 @@ import SwiftUI
 
 struct AddNutriGoalView: View {
     
-    let Array = infosArray
+    @Environment(AppState.self) private var appState
+    @Environment(\.dismiss) private var dismiss
     
+    @State var viewModel: NutriGoalViewModel
+    @State private var showPersoGoal = false
+    @State private var showAlert = false
+    
+    let Array = infosArray
+    var onGoalAdded: (() -> Void)? = nil
+        
     var body: some View {
-
             VStack {
-                Rectangle()
-                    .foregroundColor(.black)
-                    .cornerRadius(15)
-                    .frame(width: 50, height: 6)
-                    .padding(.bottom, 30)
-                    .padding(.top, 20)
-                
+           
                 Text("Objectif nutritionnel")
                     .font(.custom("Parkinsans-SemiBold", size: 25))
                     .padding(.bottom, 20)
+                    .padding(.top, 50)
                 
-                Text("is a long established fact that a reader will be distracted.")
+                Text("Choisissez comment définir votre objectif nutritionnel.")
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(.bottom, 30)
                 
                 ForEach(Array) { info in
-                    ZStack{
+                    ZStack {
                         Rectangle()
                             .foregroundColor(info.color)
                             .frame(height: 215)
                             .cornerRadius(15)
                         
-                        VStack(spacing: 15){
-                            //TITLE
+                        VStack(spacing: 15) {
                             Text(info.title)
                                 .font(.custom("Parkinsans-SemiBold", size: 18))
                                 .foregroundColor(.black)
                             
-                            //DESCRIPTION
                             Text(info.description)
                                 .foregroundColor(.black)
                                 .multilineTextAlignment(.center)
                                 .padding(.bottom, 20)
                             
-                            //BUTTON
-                            Button{
-                                //Logique
-                            }label: {
-                                ZStack{
-                                Rectangle()
-                                    .foregroundColor(.black)
-                                    .cornerRadius(15)
-                                Text(info.buttonText)
-                                    .font(.custom("Parkinsans-Medium", size: 16))
-                                    .foregroundColor(.white)
+                            Button {
+                                if info.buttonText == "Lancer" {
+                                    // CALCUL AUTO
+                                    Task {
+                                        guard let token = appState.token else {
+                                            return print("Error : No token")
+                                        }
+                                        await viewModel.fetchAutoNutriGoal(token: token)
+                                        onGoalAdded?()
+                                        showAlert = true
+                                    }
+                                    //PERSONNALISER GOAL
+                                } else {
+                                    showPersoGoal.toggle()
+                                }
+                            } label: {
+                                ZStack {
+                                    Rectangle()
+                                        .foregroundColor(.black)
+                                        .cornerRadius(15)
+                                    Text(info.buttonText)
+                                        .font(.custom("Parkinsans-Medium", size: 16))
+                                        .foregroundColor(.white)
+                                }
+                                .frame(height: 50)
                             }
-                            .frame(height: 50)
+                            .alert("Objectif ajouté avec succés ​🥑​", isPresented: $showAlert) {
+                                Button("OK", role: .cancel) {
+                                    dismiss()
+                                }
                             }
                         }
                         .padding(.horizontal, 25)
                     }
+                    .padding(.vertical, 3)
                 }
-                .padding(.vertical, 3)
                 
                 Spacer()
             }
             .padding(.horizontal, 17)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.white)
+            .sheet(isPresented: $showPersoGoal) {
+                PersoNutiGoal(
+                    viewModel: viewModel,
+                    onSave: {
+                        showPersoGoal = false
+                        dismiss()
+                    }
+                )
+            }
     }
 }
 
+
 #Preview {
-    AddNutriGoalView()
+    AddNutriGoalView(viewModel: NutriGoalViewModel())
+        .environment(AppState())
 }

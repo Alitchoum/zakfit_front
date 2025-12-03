@@ -39,7 +39,6 @@ final class RegisterViewModel {
     var receivedToken: String?
     
     // MARK: - Register
-    
     func register() async {
         guard validateFields() else { return }
         
@@ -69,7 +68,7 @@ final class RegisterViewModel {
         isLoading = false
     }
     
-    // MARK: Fonction validation des champs
+    // MARK: validation des champs
     private func validateFields() -> Bool {
         guard !firstName.isEmpty,
               !lastName.isEmpty,
@@ -87,7 +86,7 @@ final class RegisterViewModel {
         return true
     }
     
-    // MARK: Création de la requête
+    // MARK: Création requête
     private func createRequest() throws -> URLRequest {
         guard let url = URL(string: "http://127.0.0.1:8080/auth/register") else {
             throw URLError(.badURL)
@@ -108,7 +107,7 @@ final class RegisterViewModel {
         return request
     }
     
-    // MARK: - Validation de la réponse
+    // MARK: - Validation réponse
     private func validateResponse(data: Data, response: URLResponse) throws {
         guard let httpResponse = response as? HTTPURLResponse,
               (200..<300).contains(httpResponse.statusCode) else {

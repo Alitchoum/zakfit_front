@@ -7,23 +7,27 @@
 
 import SwiftUI
 
-struct AddSportGoalView: View {
+struct AddPhysicalGoalView: View {
         
+    @Environment(AppState.self) private var appState
+    @Environment(\.dismiss) private var dismiss
+    @State var viewModel = PhysicalGoalViewModel()
+    
+    @State private var fequencyText = ""
+    @State private var durationText = ""
+    @State private var caloriesText = ""
+    @State private var showAlert = false
+    
+    var onGoalAdded: (() -> Void)? = nil
+    
     var body: some View {
 
             VStack (spacing: 15){
-                Rectangle()
-                    .foregroundColor(.black)
-                    .cornerRadius(15)
-                    .frame(width: 50, height: 6)
-                    .padding(.bottom, 30)
-                    .padding(.top, 20)
-                
                 //TITLE
                 Text("Objectif physique")
                     .font(.custom("Parkinsans-SemiBold", size: 25))
                     .padding(.bottom, 10)
-                
+                    .padding(.top, 50)
                 //IMAGE
                 Image("activity")
                     .resizable()
@@ -44,32 +48,32 @@ struct AddSportGoalView: View {
                 }
                                
                 //FREQUENCY
-                TextField("Fréquence / semaine", text: .constant(""))
+                TextField("Fréquence / semaine", text: $fequencyText)
                     .padding(.horizontal, 20)
                     .frame(height: 50)
                     .background(.gris)
                     .cornerRadius(15)
+                    .keyboardType(.numberPad)
                     .disableAutocorrection(true)
-                    .textInputAutocapitalization(.never)
                 
                 //DURATION
-                TextField("Durée / séance", text: .constant(""))
+                TextField("Durée / séance", text: $durationText)
                     .padding(.horizontal, 20)
                     .frame(height: 50)
                     .background(.gris)
                     .cornerRadius(15)
                     .disableAutocorrection(true)
-                    .textInputAutocapitalization(.never)
+                    .keyboardType(.numberPad)
                 
                 //CALORIES BURNED
                 ZStack {
-                    TextField("Calories brûlées", text: .constant(""))
+                    TextField("Calories brûlées", text: $caloriesText)
                         .padding(.horizontal, 20)
                         .frame(height: 50)
                         .background(.gris)
                         .cornerRadius(15)
                         .disableAutocorrection(true)
-                        .textInputAutocapitalization(.never)
+                        .keyboardType(.numberPad)
                     
                     //BUTTON CALCUL AUTO
                     HStack{
@@ -88,21 +92,39 @@ struct AddSportGoalView: View {
                             }
                         }
                     }
-                    
-                    //BUTTON TO VALIDATE
-                    Button{
-                        //LOGIQUE
-                    } label: {
-                        ZStack(alignment: .center) {
-                            Rectangle()
-                                .foregroundColor(.black)
-                                .cornerRadius(15)
-                            Text("Valider")
-                                .font(.custom("Parkinsans-Medium", size: 16))
-                                .foregroundColor(.white)
+                }
+                
+                //BUTTON TO VALIDATE
+                Button{
+                        guard let token = appState.token
+                    else {
+                            return print("error : token invalid")
                         }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
+                    let frequency = Int(fequencyText)
+                       let duration = Int(durationText)
+                       let caloriesBurned = Double(caloriesText)
+                    
+                    Task {
+                        await viewModel.fetchPhysicalGoal(token: token, duration: duration, frequency: frequency, caloriesBurned: caloriesBurned)
+                        onGoalAdded?()
+                        showAlert = true
+                    }
+                } label: {
+                    ZStack(alignment: .center) {
+                        Rectangle()
+                            .foregroundColor(.black)
+                            .cornerRadius(15)
+                        Text("Valider")
+                            .font(.custom("Parkinsans-Medium", size: 16))
+                            .foregroundColor(.white)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                }
+                .padding(.top, 10)
+                .alert("Objectif physique ajouté avec succés 💪", isPresented: $showAlert) {
+                    Button("OK", role: .cancel){
+                        dismiss()
                     }
                 }
                 Spacer()
@@ -114,5 +136,6 @@ struct AddSportGoalView: View {
 }
 
 #Preview {
-    AddSportGoalView()
+    AddPhysicalGoalView()
+        .environment(AppState())
 }
