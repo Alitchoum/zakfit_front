@@ -19,12 +19,6 @@ struct NutritionGoalDTO: Codable {
 final class NutriGoalViewModel {
     
     var nutriGoal: NutritionGoalDTO?
-//    var appState: AppState
-//    
-//    init(appState: AppState) {
-//        self.appState = appState
-//    }
-    init() {}
     
     //CREATE NUTRI GOAL PERSO
     func fetchNutriGoal(token: String, caloriesTarget: Double, proteinsTarget: Double?, carbsTarget: Double?, fatsTarget: Double?, isAuto: Bool) async {
@@ -168,5 +162,12 @@ final class NutriGoalViewModel {
                print("Error: \(error)")
            }
        }
+    
+    //FONCTION PROGRESSION
+    func progressBar(current: Double, target: Double, maxWidth: CGFloat) -> CGFloat {
+        guard target > 0 else { return 0 }
+        return min(current / target, 1.0) * maxWidth
+    }
 }
+
 

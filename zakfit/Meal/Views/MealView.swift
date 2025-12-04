@@ -11,12 +11,20 @@ struct MealView: View {
     
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
-    @State private var viewModel = MealViewModel()
+    @State var viewModel : MealViewModel
     @State private var showAlert = false
         
     let mealID: UUID
     let mealType: MealType
-    let textArray = arrayInfos
+    
+    var mealInfos: [MealModel] {
+        [
+            .init(type: "Calories", value: Double(viewModel.currentMeal?.totalCalories ?? 0), color: .violet),
+            .init(type: "Protéines", value: Double(viewModel.currentMeal?.totalProteins ?? 0), color: .rose),
+            .init(type: "Lipides", value: Double(viewModel.currentMeal?.totalFats ?? 0), color: .vert),
+            .init(type: "Glucides", value: Double(viewModel.currentMeal?.totalCarbs ?? 0), color: .bleu)
+        ]
+    }
     
     var onSave: (() -> Void)? = nil
     
@@ -29,24 +37,23 @@ struct MealView: View {
                 .font(.custom("Parkinsans-SemiBold", size: 25))
             
             //NUTRI TOTAUX
-            HStack {
-                ForEach(textArray) { item in
+            HStack(spacing: 7){
+                ForEach(mealInfos) { info in
                     ZStack {
                         Rectangle()
                             .frame(height: 90)
                             .cornerRadius(15)
-                            .foregroundColor(item.color)
+                            .foregroundColor(info.color)
                         VStack(spacing: 5) {
-                            Text("\(item.value)g")
-                                .font(.custom("Parkinsans-SemiBold", size: 20))
-                            Text(item.type)
+                            Text("\(String(format: "%.1f", info.value))")
+                                .font(.custom("Parkinsans-SemiBold", size: 18))
+                            Text(info.type)
                                 .font(.system(size: 14))
                         }
                     }
                 }
             }
             .padding(.horizontal, 17)
-            
             
             //LISTE PRODUITS
             HStack {
@@ -61,7 +68,6 @@ struct MealView: View {
             .padding(.horizontal, 17)
             
             ScrollView(.vertical, showsIndicators: false) {
-                
                 VStack(spacing: 20) {
                     
                     // LISTE ALIMENTS
@@ -71,7 +77,7 @@ struct MealView: View {
                             .font(.system(size: 16))
                             .padding(.top, 10)
                     } else {
-                        VStack(spacing: 15) {
+                        VStack(spacing: 8) {
                             ForEach(viewModel.foodsInMeal) { foodItem in
                                 FoodInMealCardView(food: foodItem)
                             }
@@ -79,27 +85,57 @@ struct MealView: View {
                     }
                     
                     // BOUTON SAVE
-                    Button {
-                        Task {
-                            guard let token = appState.token else { return }
-                            await viewModel.refreshMeal(token: token, mealID: mealID)
-                            showAlert = true
+                    if viewModel.foodsInMeal.isEmpty{
+                        //BUTTON FIXE
+                            ZStack {
+                                Rectangle()
+                                    .foregroundColor(.gray)
+                                    .cornerRadius(15)
+                                    .frame(height: 50)
+                                Text("Enregistrer le repas")
+                                    .font(.custom("Parkinsans-Medium", size: 16))
+                                    .foregroundColor(.white)
+                            }
+                    } else {
+                        //BUTTON CREATE MEAL
+                        Button {
+                       
+                                Task {
+                                        guard let token = appState.token else { return }
+
+                                        // Parcours tous les aliments ajoutés dans le repas
+                                        for food in viewModel.foodsInMeal {
+                                            await viewModel.addFoodToMeal(
+                                                token: token,
+                                                mealID: mealID,
+                                                foodID: food.id,
+                                                quantity: food.quantity
+                                            )
+                                        }
+
+                                        // Ensuite, tu peux recharger les détails du repas
+                                        await viewModel.fetchMealDetails(token: token, mealID: mealID)
+
+                                        // Afficher l'alerte
+                                        showAlert = true
+                                    }
+                                
+                        } label: {
+                            ZStack {
+                                Rectangle()
+                                    .foregroundColor(.black)
+                                    .cornerRadius(15)
+                                    .frame(height: 50)
+                                Text("Enregistrer le repas")
+                                    .font(.custom("Parkinsans-Medium", size: 16))
+                                    .foregroundColor(.white)
+                            }
                         }
-                    } label: {
-                        ZStack {
-                            Rectangle()
-                                .foregroundColor(.black)
-                                .cornerRadius(15)
-                                .frame(height: 50)
-                            Text("Enregistrer le repas")
-                                .font(.custom("Parkinsans-Medium", size: 16))
-                                .foregroundColor(.white)
+                        
+                        .padding(.bottom, 20)
+                        .alert("Repas enregistré avec succès 😋​", isPresented: $showAlert) {
+                            Button("OK", role: .cancel) { onSave?() }
                         }
-                    }
-                    .padding(.horizontal, 17)
-                    .padding(.bottom, 20)
-                    .alert("Repas enregistré avec succès 😋​", isPresented: $showAlert) {
-                        Button("OK", role: .cancel) { onSave?() }
                     }
                 }
             }
@@ -113,7 +149,8 @@ struct MealView: View {
 }
 
 #Preview {
-    MealView(mealID: UUID(), mealType: MealType(
+    MealView(viewModel: MealViewModel(),
+             mealID: UUID(), mealType: MealType(
         name: "Déjeuner",
         picto: "dej",
         color: .vertC

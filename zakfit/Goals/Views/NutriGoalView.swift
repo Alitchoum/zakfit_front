@@ -10,7 +10,44 @@ import SwiftUI
 struct NutriGoalView: View {
     
     @Environment(AppState.self) private var appState
-    @State var viewModel : NutriGoalViewModel
+    @State var nutriViewModel : NutriGoalViewModel
+    @State var mealViewModel : MealViewModel
+
+    let maxLargeur: CGFloat = 300
+    
+    //CALORIES
+    var currentCalories: Double {
+        Double(mealViewModel.calculTotal(type: "Calories")) ?? 0
+    }
+    
+    var caloriesTarget: Double {
+        nutriViewModel.nutriGoal?.caloriesTarget ?? 1
+    }
+   //PROTEINS
+    var currentProteins: Double {
+        Double(mealViewModel.calculTotal(type: "Proteines")) ?? 0    }
+    
+    var proteinsTarget: Double {
+        nutriViewModel.nutriGoal?.proteinsTarget ?? 1
+    }
+    
+    //FATS
+    var currentFats: Double {
+        Double(mealViewModel.calculTotal(type: "Lipides")) ?? 0
+    }
+     
+     var fatsTarget: Double {
+         nutriViewModel.nutriGoal?.fatsTarget ?? 1
+     }
+    
+    //CARBS
+    var currentCarbs: Double {
+        Double(mealViewModel.calculTotal(type: "Glucides")) ?? 0
+    }
+     
+     var carbsTarget: Double {
+         nutriViewModel.nutriGoal?.carbsTarget ?? 1
+     }
     
     var body: some View {
         
@@ -25,7 +62,7 @@ struct NutriGoalView: View {
                         Text("Calories / jour")
                             .font(.system(size: 16))
                         Spacer()
-                        Text("g / \(String(format: "%.0f", Double(viewModel.nutriGoal?.caloriesTarget ?? 0)))g")
+                        Text(" \(String(format: "%.0f",currentCalories))g / \(String(format: "%.0f",caloriesTarget))g")
                             .font(.system(size: 16))
                     }
                     // PROGRESS BAR
@@ -35,18 +72,18 @@ struct NutriGoalView: View {
                             .frame(height: 20)
                         RoundedRectangle(cornerRadius: 15)
                             .foregroundColor(.violet)
-                            .frame(width: 100, height: 20)
+                            .frame(width: nutriViewModel.progressBar(current: currentCalories, target: caloriesTarget , maxWidth: maxLargeur), height: 20)
                     }
                 }
                 
                 //BLOC PROTEINES
-                if viewModel.nutriGoal?.proteinsTarget != nil {
+                if nutriViewModel.nutriGoal?.proteinsTarget != nil {
                     VStack(spacing: 20){
                         HStack {
                             Text("Calories / jour")
                                 .font(.system(size: 16))
                             Spacer()
-                            Text("g / \(String(format: "%.0f", Double(viewModel.nutriGoal?.proteinsTarget ?? 0)))g")
+                            Text("\(String(format: "%.0f", currentProteins))g / \(String(format: "%.0f", proteinsTarget))g")
                                 .font(.system(size: 16))
                         }
                         // PROGRESS BAR
@@ -56,18 +93,18 @@ struct NutriGoalView: View {
                                 .frame(height: 20)
                             RoundedRectangle(cornerRadius: 15)
                                 .foregroundColor(.rose)
-                                .frame(width: 100, height: 20)
+                                .frame(width: nutriViewModel.progressBar(current: currentProteins, target: proteinsTarget, maxWidth: maxLargeur), height: 20)
                         }
                     }
                 }
                 //BLOC LIPIDES
-                if viewModel.nutriGoal?.fatsTarget != nil {
+                if nutriViewModel.nutriGoal?.fatsTarget != nil {
                     VStack(spacing: 20){
                         HStack {
-                            Text("Lipide / jour")
+                            Text("Lipides / jour")
                                 .font(.system(size: 16))
                             Spacer()
-                            Text("g / \(String(format: "%.0f", Double(viewModel.nutriGoal?.fatsTarget ?? 0)))g")
+                            Text("\(String(format: "%.0f", currentFats))g / \(String(format: "%.0f", fatsTarget))g")
                                 .font(.system(size: 16))
                         }
                         // PROGRESS BAR
@@ -77,19 +114,19 @@ struct NutriGoalView: View {
                                 .frame(height: 20)
                             RoundedRectangle(cornerRadius: 15)
                                 .foregroundColor(.vert)
-                                .frame(width: 100, height: 20)
+                                .frame(width: nutriViewModel.progressBar(current: currentFats, target: fatsTarget, maxWidth: maxLargeur), height: 20)
                         }
                     }
                 }
                 
                 //BLOC GLUCIDES
-                if viewModel.nutriGoal?.carbsTarget != nil {
+                if nutriViewModel.nutriGoal?.carbsTarget != nil {
                     VStack(spacing: 20){
                         HStack {
                             Text("Glucides / jour")
                                 .font(.system(size: 16))
                             Spacer()
-                            Text("g / \(String(format: "%.0f", Double(viewModel.nutriGoal?.carbsTarget ?? 0)))g")
+                            Text("\(String(format: "%.0f", currentCarbs))g / \(String(format: "%.0f", carbsTarget))g")
                                 .font(.system(size: 16))
                         }
                         // PROGRESS BAR
@@ -99,7 +136,7 @@ struct NutriGoalView: View {
                                 .frame(height: 20)
                             RoundedRectangle(cornerRadius: 15)
                                 .foregroundColor(.bleu)
-                                .frame(width: 100, height: 20)
+                                .frame(width: nutriViewModel.progressBar(current: currentCarbs, target: carbsTarget, maxWidth: maxLargeur), height: 20)
                         }
                     }
                 }
@@ -130,6 +167,6 @@ struct NutriGoalView: View {
 }
 
 #Preview {
-    NutriGoalView(viewModel: NutriGoalViewModel())
+    NutriGoalView(nutriViewModel: NutriGoalViewModel(), mealViewModel: MealViewModel())
         .environment(AppState())
 }

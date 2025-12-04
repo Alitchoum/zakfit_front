@@ -11,7 +11,7 @@ struct FoodDetailView: View {
     
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
-    @State var viewModel : MealViewModel
+    @State var viewModel :  MealViewModel
     
     let nutriArray = foodModelArray
     
@@ -110,7 +110,7 @@ struct FoodDetailView: View {
                         if let token = appState.token,
                         let quantity = Int(quantityText){
                             await viewModel.addFoodToMeal(token: token, mealID: mealID, foodID: food.id, quantity: quantity)
-                            await viewModel.refreshMeal(token: token, mealID: mealID)
+                            await viewModel.fetchMealDetails(token: token, mealID: mealID)
                             dismiss()
                         } else {
                             print("Error adding food to meal")

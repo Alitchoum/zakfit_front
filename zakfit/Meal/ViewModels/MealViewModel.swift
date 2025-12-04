@@ -29,7 +29,6 @@ struct FoodInMealResponse: Identifiable, Codable {
     let fats: Double
 }
 
-
 struct FoodCategoriesResponse: Identifiable, Codable {
     let id: UUID
     let name: String
@@ -82,23 +81,6 @@ final class MealViewModel {
     var searchText = ""
     var selectedCategoryID: UUID?
     
-    
-//    var totalCalories: Int {
-//        foodsInMeal.reduce(0) { $0 + Int($1.calories) }
-//    }
-//
-//    var totalCarbs: Int {
-//        foodsInMeal.reduce(0) { $0 + Int($1.carbs) }
-//    }
-//
-//    var totalProteins: Int {
-//        foodsInMeal.reduce(0) { $0 + Int($1.proteins) }
-//    }
-//
-//    var totalFats: Int {
-//        foodsInMeal.reduce(0) { $0 + Int($1.fats) }
-//    }
-    
     //LOAD CATEGORIES FOOD
     func fetchFoodCategories() async {
         guard let url = URL(string: "http://127.0.0.1:8080/foodCategories") else { return }
@@ -110,7 +92,7 @@ final class MealViewModel {
             foodCategories = decodedFoodCategories
             
         } catch {
-            print("Error: fetching data (categories food): \(error)")
+            print("Error: load data (categories food): \(error)")
         }
     }
     
@@ -142,7 +124,7 @@ final class MealViewModel {
                 print("success : User Food is created")
             }
         } catch {
-            print("Error send user food : \(error)")
+            print("Error : create user food : \(error)")
         }
     }
     
@@ -253,10 +235,10 @@ final class MealViewModel {
             
             await MainActor.run {
                 self.currentMeal = meal
-                self.foodsInMeal = meal.foods ?? [] // ✅ tableau vide si pas d’aliments
+                self.foodsInMeal = meal.foods ?? [] //si vide
             }
             
-            print("Fetched meal foods:")
+            print("Load meal foods")
             
         } catch {
             await MainActor.run {
@@ -264,11 +246,46 @@ final class MealViewModel {
             }
         }
     }
-
-    //REFRESH MEAL AFTER ADD FOOD
-    func refreshMeal(token: String, mealID: UUID) async {
-        await fetchMealDetails(token: token, mealID: mealID)
+    
+    //GET ALL USER MEAL
+    func getUserMeals(token: String) async {
+        
+        guard let url = URL(string: "http://127.0.0.1:8080/meals/current") else { return }
+        
+        do {
+            
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            
+            let (data, _) = try await URLSession.shared.data(for: request)
+            
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let decodedMeals = try decoder.decode([MealResponseDTO].self, from: data)
+            meals = decodedMeals
+        } catch {
+            print("Error: decoding data (meals response): \(error)")
+        }
     }
-   
+    
+    // FONCTION CALCUL TOTAUX NUTRI / JOUR
+    func calculTotal(type: String) -> String {
+        var result = 0.0
+           for meal in meals {
+               switch type {
+               case "Calories":
+                   result += meal.totalCalories
+               case "Protéines":
+                   result += meal.totalProteins
+               case "Lipides":
+                   result += meal.totalFats
+               case "Glucides":
+                   result += meal.totalCarbs
+               default:
+                   break
+               }
+           }
+        return "\(String(format: "%.1f", result))"
+    }
 }
-

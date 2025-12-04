@@ -17,7 +17,8 @@ struct AddMealTypeView: View {
     
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
-    @State private var viewModel = MealViewModel()
+    @State var viewModel : MealViewModel
+    
     @State private var selectedMealType: MealType? = nil
     @State private var createdMealID: UUID? = nil
     @State private var navigateToMealView = false
@@ -97,6 +98,7 @@ struct AddMealTypeView: View {
             .navigationDestination(isPresented: $navigateToMealView) {
                             if let mealID = createdMealID, let mealType = selectedMealType {
                                 MealView(
+                                    viewModel: viewModel,
                                     mealID: mealID,
                                     mealType: mealType,
                                     onSave: {
@@ -111,7 +113,7 @@ struct AddMealTypeView: View {
             }
 
 #Preview {
-    AddMealTypeView()
+    AddMealTypeView(viewModel: MealViewModel())
         .environment(AppState())
 }
 

@@ -8,27 +8,57 @@
 import SwiftUI
 
 struct DashboardView: View {
-    @State private var isShowingAddActivity = false
-    @State private var isShowingAddMeal = false 
     
+    @State private var mealViewmodel =  MealViewModel()
+    @State private var goalViewModel = NutriGoalViewModel()
+    @Environment(AppState.self) private var appState
+    
+    @State private var isShowingAddActivity = false
+    @State private var isShowingAddMeal = false
+   
+    var stats: [Stat] {
+        [
+            Stat(type: "Calories", value: Double(mealViewmodel.calculTotal(type: "Calories")) ?? 0, target: goalViewModel.nutriGoal?.caloriesTarget ?? 2000, color: .violet),
+            Stat(type: "Protéines", value: Double(mealViewmodel.calculTotal(type: "Protéines")) ?? 0, target: goalViewModel.nutriGoal?.proteinsTarget ?? 100, color: .rose),
+            Stat(type: "Lipides", value: Double(mealViewmodel.calculTotal(type: "Lipides")) ?? 0, target: goalViewModel.nutriGoal?.fatsTarget ?? 70, color: .vert),
+            Stat(type: "Glucides", value: Double(mealViewmodel.calculTotal(type: "Glucides")) ?? 0, target: goalViewModel.nutriGoal?.carbsTarget ?? 250, color: .bleu)
+        ]
+    }
+
     var body: some View {
         NavigationStack {
+            
+            //DATE DU JOUR
+            Text(Date.now, format: Date.FormatStyle()
+                .day()
+                .month(.wide)
+                .year()
+                .locale(Locale(identifier: "fr_FR"))
+            )
+                .font(.custom("Parkinsans-SemiBold", size: 24))
+                .padding(.bottom, 25)
+                .padding(.top, 20)
             VStack(alignment: .leading) {
-                Text("Dashboard")
-                    .font(.custom("Parkinsans-SemiBold", size: 24))
-                    .padding(.bottom, 40)
-                    .padding(.top, 10)
-                
+             
                 Text("Progression")
                     .font(.custom("Parkinsans-Medium", size: 20))
                 
-                Rectangle()
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 170)
+                VStack(spacing: 20) {
+                    ZStack {
+                        Rectangle()
+                            .foregroundColor(.gris)
+                        HStack(spacing: 15) {
+                            ForEach(stats) { stat in
+                                StatsView(stat: stat)
+                            }
+                        }
+                    }
                     .cornerRadius(15)
-                    .foregroundColor(.gris)
+                    .frame(height: 190)
+                }
                 
-                Text("Mes tâches")
+                
+                Text("Tâches")
                     .font(.custom("Parkinsans-Medium", size: 20))
                 
                 HStack {
@@ -83,7 +113,12 @@ struct DashboardView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 185)
                     .fullScreenCover(isPresented: $isShowingAddMeal) {
-                        AddMealTypeView()
+                        AddMealTypeView(
+                            viewModel: mealViewmodel,
+                            onMealSaved: {
+                                isShowingAddMeal = false
+                            }
+                        )
                     }
                 }
                 
@@ -111,6 +146,13 @@ struct DashboardView: View {
                 Spacer()
             }
             .padding(.horizontal, 17)
+        }
+        .onAppear {
+            Task {
+                guard let token = appState.token else { return print("Error: No token") }
+                await mealViewmodel.getUserMeals(token: token)
+                await goalViewModel.getNutriGoal(token: token)
+            }
         }
     }
 }

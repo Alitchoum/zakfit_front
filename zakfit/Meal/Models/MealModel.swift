@@ -7,19 +7,20 @@
 
 import SwiftUI
 
+//VIEW MEAL
 struct MealModel: Identifiable {
     var id: UUID = UUID()
     var type: String
-    var value: Int
+    var value: Double
     var color : Color
 }
 
-let arrayInfos = [
-    MealModel(type: "Calories", value: 45 ,color: .violet),
-    MealModel(type: "Proteines", value: 65 ,color: .rose),
-    MealModel(type: "Lipides", value: 5 ,color: .vert),
-    MealModel(type: "Glucides", value: 15 ,color: .bleu),
-]
+//VIEW MY MEALS
+struct MyMealsModel: Identifiable {
+    var id: UUID = UUID()
+    var type: String
+    var back: Color
+    var color : Color
+}
 
 let colorArray: [Color] = [.vert, .bleu, .rose, .violet]
-

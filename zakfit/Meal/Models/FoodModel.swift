@@ -15,14 +15,12 @@ struct FoodModel: Identifiable {
     var name: String
 }
 
-
 let foodModelArray: [FoodModel] = [
     FoodModel(back: .violetC, picto: "fire", color: .violet, name: "Calories"),
     FoodModel(back: .roseC, picto: "fish-simple", color: .rose,  name: "Proteines"),
     FoodModel(back: .vertC, picto: "avocado", color: .vert, name: "Lipides"),
     FoodModel(back: .bleuC, picto: "ble", color: .bleu,  name: "Glucides")
 ]
-
 
 func calculApport(food: FoodResponse, nutriment: String, quantite: Int) -> String {
     var result: Double = 0

@@ -16,51 +16,56 @@ struct FoodInMealCardView: View {
             Rectangle()
                 .foregroundColor(.gris)
                 .cornerRadius(15)
-            VStack(alignment: .leading){
-                
+                .frame(height: 132)
+            
+            VStack(alignment: .leading, spacing: 10){
                 Text(food.name)
                     .font(.custom("Parkinsans-SemiBold", size: 17))
                 
-                Text("Quantité : \(food.quantity)g")
+                Text("Quantité: \(food.quantity) g / Calories: \(Int(food.calories)) Kcls")
                     .foregroundColor(.gray)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 10)
                 
-                HStack(spacing:15){
-                    //Calories
-                    HStack(spacing:7){
-                        Circle()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(.violet)
-                        Text("\(String(format: "%.0f", food.proteins))Kcls")
-                    }
-                    
-                    //Proteins
-                    HStack{
+                HStack{
+                    // PROTÉINES
+                    HStack(spacing: 10) {
                         Circle()
                             .frame(width: 20, height: 20)
                             .foregroundColor(.rose)
-                        Text("\(String(format: "%.0f", food.proteins))g")
+                        Text("\(String(format: "%.1f", food.proteins)) g")
+                            .font(Font.custom("Parkinsans-SemiBold", size: 16))
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
                     }
-                    //Lipides = fats
-                    HStack{
+                    Spacer()
+
+                    // LIPIDES
+                    HStack(spacing: 10) {
                         Circle()
                             .frame(width: 20, height: 20)
                             .foregroundColor(.vert)
-                        Text("\(String(format: "%.0f",food.fats))g")
+                        Text("\(String(format: "%.1f", food.fats)) g")
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
+                            .font(Font.custom("Parkinsans-SemiBold", size: 16))
                     }
-                    
-                    //Glucides = carbs
-                    HStack{
+                    Spacer()
+
+                    // GLUCIDES
+                    HStack(spacing: 10) {
                         Circle()
                             .frame(width: 20, height: 20)
                             .foregroundColor(.bleu)
-                        Text("\(String(format: "%.0f", food.carbs))g")
+                        Text("\(String(format: "%.1f", food.carbs)) g")
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
+                            .font(Font.custom("Parkinsans-SemiBold", size: 16))
                     }
                 }
+                .frame(maxWidth: .infinity)
             }
+            .padding(20)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 130)
     }
 }
 
