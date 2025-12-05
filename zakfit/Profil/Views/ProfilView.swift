@@ -16,6 +16,7 @@ struct ProfilView: View {
     @State var physicalViewModel = PhysicalGoalViewModel()
     @State var nutriViewModel = NutriGoalViewModel()
     @State var mealViewModel = MealViewModel()
+    @State var activityViewModel = ActivityViewModel()
     
     var userInfos: [InfosItem] {
         let user = appState.user
@@ -122,7 +123,7 @@ struct ProfilView: View {
                 
                 //BLOC DYNAMIQUE PHYSICAL GOAL
                 if physicalViewModel.physicalGoal != nil {
-                    PhysicalGoalView(viewModel: physicalViewModel)
+                    PhysicalGoalView(sportviewModel: physicalViewModel, activityViewModel: activityViewModel)
                 } else{
                     
                     Button {
@@ -169,6 +170,7 @@ struct ProfilView: View {
                     await nutriViewModel.getNutriGoal(token: token)
                     await physicalViewModel.getPhysicalGoal(token: token)
                     await mealViewModel.getUserMeals(token: token)
+                    await activityViewModel.getFilteredActivities(token: token, category: "", duration: "")
                 }
             }
         }

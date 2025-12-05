@@ -71,4 +71,10 @@ final class PhysicalGoalViewModel {
             print("Error: \(error)")
         }
     }
+    
+    //PROGRESS BAR
+    func sportProgressBar(current: Double, target: Double, maxWidth: CGFloat) -> CGFloat {
+          guard target > 0 else { return 0 }
+          return min(current / target, 1.0) * maxWidth
+      }
 }

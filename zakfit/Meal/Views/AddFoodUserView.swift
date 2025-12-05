@@ -93,8 +93,6 @@ struct AddFoodUserView : View {
                 .frame(height: 50)
                 .background(.gris)
                 .cornerRadius(15)
-                .disableAutocorrection(true)
-                .textInputAutocapitalization(.never)
                 .padding(.horizontal, 17)
                 .padding(.bottom, 15)
             
@@ -190,7 +188,7 @@ struct AddFoodUserView : View {
                 }
                 .frame(height: 50)
                 .padding(.horizontal, 17)
-                .alert("Aliment ajouté avec succès!", isPresented: $showAlert) {
+                .alert("Aliment ajouté avec succès 🤩!", isPresented: $showAlert) {
                     Button("OK", role: .cancel) {
                         dismiss()
                     }
