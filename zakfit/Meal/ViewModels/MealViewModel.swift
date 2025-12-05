@@ -182,7 +182,7 @@ final class MealViewModel {
             return nil
         }
     }
-
+    
     //(CREATE) -> ADD FOODS TO USER MEAL (TABLE PIVOT FOOD MEALS)
     func addFoodToMeal(token: String, mealID: UUID, foodID: UUID, quantity: Int) async {
         
@@ -212,7 +212,7 @@ final class MealViewModel {
         }
     }
     
-    //FETCH DETAIL OF MEAL WITH HIS FOODS
+    //GET DETAIL OF MEAL WITH HIS FOODS
     func fetchMealDetails(token: String, mealID: UUID) async {
         guard let url = URL(string: "http://127.0.0.1:8080/meals/\(mealID)") else {
             await MainActor.run { self.errorMessage = "URL invalide" }
@@ -235,7 +235,7 @@ final class MealViewModel {
             
             await MainActor.run {
                 self.currentMeal = meal
-                self.foodsInMeal = meal.foods ?? [] //si vide
+                self.foodsInMeal = meal.foods ?? []
             }
             
             print("Load meal foods")
@@ -247,7 +247,7 @@ final class MealViewModel {
         }
     }
     
-    //GET ALL USER MEAL
+    //GET ALL USER MEAL (DAY)
     func getUserMeals(token: String) async {
         
         guard let url = URL(string: "http://127.0.0.1:8080/meals/current") else { return }
@@ -272,20 +272,20 @@ final class MealViewModel {
     // FONCTION CALCUL TOTAUX NUTRI / JOUR
     func calculTotal(type: String) -> String {
         var result = 0.0
-           for meal in meals {
-               switch type {
-               case "Calories":
-                   result += meal.totalCalories
-               case "Protéines":
-                   result += meal.totalProteins
-               case "Lipides":
-                   result += meal.totalFats
-               case "Glucides":
-                   result += meal.totalCarbs
-               default:
-                   break
-               }
-           }
+        for meal in meals {
+            switch type {
+            case "Calories":
+                result += meal.totalCalories
+            case "Protéines":
+                result += meal.totalProteins
+            case "Lipides":
+                result += meal.totalFats
+            case "Glucides":
+                result += meal.totalCarbs
+            default:
+                break
+            }
+        }
         return "\(String(format: "%.1f", result))"
     }
 }

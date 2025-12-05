@@ -18,10 +18,10 @@ struct DashboardView: View {
    
     var stats: [Stat] {
         [
-            Stat(type: "Calories", value: Double(mealViewmodel.calculTotal(type: "Calories")) ?? 0, target: goalViewModel.nutriGoal?.caloriesTarget ?? 2000, color: .violet),
-            Stat(type: "Protéines", value: Double(mealViewmodel.calculTotal(type: "Protéines")) ?? 0, target: goalViewModel.nutriGoal?.proteinsTarget ?? 100, color: .rose),
-            Stat(type: "Lipides", value: Double(mealViewmodel.calculTotal(type: "Lipides")) ?? 0, target: goalViewModel.nutriGoal?.fatsTarget ?? 70, color: .vert),
-            Stat(type: "Glucides", value: Double(mealViewmodel.calculTotal(type: "Glucides")) ?? 0, target: goalViewModel.nutriGoal?.carbsTarget ?? 250, color: .bleu)
+            Stat(type: "Calories", value: Double(mealViewmodel.calculTotal(type: "Calories")) ?? 0, target: goalViewModel.nutriGoal?.caloriesTarget ?? 0, color: .violet),
+            Stat(type: "Protéines", value: Double(mealViewmodel.calculTotal(type: "Protéines")) ?? 0, target: goalViewModel.nutriGoal?.proteinsTarget ?? 0, color: .rose),
+            Stat(type: "Lipides", value: Double(mealViewmodel.calculTotal(type: "Lipides")) ?? 0, target: goalViewModel.nutriGoal?.fatsTarget ?? 0, color: .vert),
+            Stat(type: "Glucides", value: Double(mealViewmodel.calculTotal(type: "Glucides")) ?? 0, target: goalViewModel.nutriGoal?.carbsTarget ?? 0, color: .bleu)
         ]
     }
 
@@ -36,8 +36,8 @@ struct DashboardView: View {
                 .locale(Locale(identifier: "fr_FR"))
             )
                 .font(.custom("Parkinsans-SemiBold", size: 24))
-                .padding(.bottom, 25)
-                .padding(.top, 20)
+                .padding(.bottom, 22)
+                .padding(.top, 15)
             VStack(alignment: .leading) {
              
                 Text("Progression")
@@ -56,7 +56,6 @@ struct DashboardView: View {
                     .cornerRadius(15)
                     .frame(height: 190)
                 }
-                
                 
                 Text("Tâches")
                     .font(.custom("Parkinsans-Medium", size: 20))
@@ -90,7 +89,7 @@ struct DashboardView: View {
                             .presentationDragIndicator(.visible)
                     }
                     
-                    // AJOUTER REPAS - MAINTENANT EN MODALE
+                    // AJOUTER REPAS
                     Button {
                         isShowingAddMeal.toggle()
                     } label: {

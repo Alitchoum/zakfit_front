@@ -45,8 +45,6 @@ struct genderView: View {
                     .foregroundColor(.black)
                 }
             }
-            //.background(.violetC)
-            //.padding(.horizontal, 17)
     }
 }
 

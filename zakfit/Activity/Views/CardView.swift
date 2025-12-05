@@ -10,6 +10,7 @@ import SwiftUI
 struct CardView: View {
     
     @State var activity: ActivityResponse
+    
     private var dateString: String {
             let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yy"
@@ -19,17 +20,27 @@ struct CardView: View {
     var body: some View {
         VStack{
             ZStack{
-                Rectangle()
-                    .foregroundColor(.bleuC)
-                    .frame(height: 95)
-                    .cornerRadius(15)
+                ZStack(alignment: .leading) {
+                    // CARD RECTANGLE
+                    Rectangle()
+                        .foregroundColor(Color(activity.categoryColor).opacity(0.5))
+                        .cornerRadius(15)
+                    
+                    // IMAGE DÉCORATIVE
+                    Image("test")
+                        .resizable()
+                        .frame(width: 116, height: 99)
+                        .offset(x: 240)
+                }
                 
+                .frame(maxWidth: .infinity, maxHeight: 99)
+
                 HStack(spacing: 10){
                     //PICTO
                     ZStack{
                         Circle()
                             .frame(width: 60, height: 60)
-                            .foregroundColor(.bleu)
+                            .foregroundColor(Color("\(activity.categoryColor)"))
                         AsyncImage(url: URL(string: "http://127.0.0.1:8080/activity/\(activity.categoryPicto)")) { picto in picto
                                 .resizable()
                                 .frame(width: 30, height: 30)
@@ -51,7 +62,7 @@ struct CardView: View {
                                 Image("eclair-fill")
                                     .resizable()
                                     .frame(width: 13, height: 18)
-                                Text("\(activity.caloriesBurned) kcals")
+                                Text("\(activity.caloriesBurned) kcls")
                             }
                             
                             //Durée
@@ -59,7 +70,7 @@ struct CardView: View {
                                 Image("clock-fill")
                                     .resizable()
                                     .frame(width: 18, height: 18)
-                                Text("\(activity.duration)min")
+                                Text("\(activity.duration)mn")
                             }
                             
                             //Date
@@ -73,14 +84,13 @@ struct CardView: View {
                     }
                 }
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, minHeight: 95)
         }
-        //.padding(.horizontal, 17)
     }
 }
 
 #Preview {
-    let activityForPreview = ActivityResponse(
+    CardView(activity: ActivityResponse(
           id: UUID(),
           duration: 145,
           caloriesBurned: 300,
@@ -89,7 +99,5 @@ struct CardView: View {
           categoryName: "Cyclisme",
           categoryPicto: "run.png",
           categoryColor: "bleu"
-          
-      )
-    CardView(activity: activityForPreview)
+      ))
 }

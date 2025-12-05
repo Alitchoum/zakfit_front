@@ -12,58 +12,88 @@ struct MonthView: View {
     
     @Environment(AppState.self) var appState
     
-    @State private var columns = [GridItem(.flexible()), GridItem(.flexible())]
+    private let columns = [
+        GridItem(.flexible(), spacing: 14),
+        GridItem(.flexible(), spacing: 14)
+    ]
     
+    var currentMonth: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "fr_FR")
+        formatter.dateFormat = "LLLL yyyy"
+        return formatter.string(from: Date()).capitalized
+    }
+        
     let array = arrayMonth
+    
+    var body: some View {
+        VStack(spacing: 20) {
+            
+            HStack(spacing: 15) {
+                Image("left")
+                    .resizable()
+                    .frame(width: 7, height: 13)
+                
+                Text(currentMonth)
+                    .font(.custom("Parkinsans-Medium", size: 20))
+                
+                Image("right")
+                    .resizable()
+                    .frame(width: 7, height: 13)
+            }
+            .padding(.vertical, 30)
+            
+            LazyVGrid(columns: columns, spacing: 40) {
+                ForEach(array) { item in
+                    ZStack(alignment: .leading) {
+                        
+                        Rectangle()
+                            .fill(item.color.opacity(0.5))
+                            .cornerRadius(15)
+                        
+                        // Forme imbriquée
+                        Image("shape")
+                            .resizable()
+                            .scaledToFill()
+                            .offset(x: 70, y: -50)
+                            .frame(height: 230)
+                            .clipped()
+                       
+                        VStack(alignment: .leading) {
+                            // Picto
+                            ZStack {
+                                Rectangle()
+                                    .frame(width: 70, height: 70)
+                                    .foregroundColor(item.color)
+                                    .cornerRadius(15)
+                                
+                                Image(item.picto)
+                                    .resizable()
+                                    .frame(width: 35, height: 35)
+                            }
+                            Spacer()
+                            //value /type
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("\(item.value)")
+                                    .font(.custom("Parkinsans-SemiBold", size: 30))
+                                Text(item.type)
+                                    .font(.system(size: 16))
+                                    .fixedSize(horizontal: false, vertical: true)
 
-       var body: some View {
-           
-           VStack (alignment: .center){
-               Text("Mois en cours")
-                   .font(.custom("Parkinsans-Medium", size: 25))
-                   .padding(.bottom, 20)
-           }
-           VStack (alignment: .leading){
-               Text("Récap du mois ")
-                   .font(.custom("Parkinsans-Medium", size: 25))
-                   .padding(.bottom, 20)
-
-               //GRILLE RECAP
-               LazyVGrid(columns: columns, spacing: 10) {
-                   ForEach(array) { item in
-                       ZStack{
-                           Rectangle()
-                               .frame(height: 200)
-                               .foregroundColor(item.color)
-                               .cornerRadius(15)
-                           VStack{
-                               //PICTO
-                               ZStack{
-                                   Circle()
-                                       .frame(width: 65, height: 65)
-                                       .foregroundColor(.white.opacity(0.5))
-                                      
-                                   Image(item.picto)
-                                       .resizable()
-                                       .frame(width: 40, height: 40)
-                                   
-                               }
-                               Text("\(item.value)")
-                                   .font(.custom("Parkinsans-SemiBold", size: 25))
-                                   .padding(.top, 20)
-                               Text(item.type)
-                                   .font(.system(size: 15))
-                           }
-                       }
-                       .frame(maxWidth: .infinity)
-                   }
-               }
-           }
-
+                            }
+                            .padding(.bottom, 8)
+                        }
+                        .padding(20)
+                    }
+                    .frame(height: 200)
+                }
+            }
+            
+            Spacer()
+        }
         .padding(.horizontal, 17)
     }
 }
-
 #Preview {
     MonthView()
         .environment(AppState())

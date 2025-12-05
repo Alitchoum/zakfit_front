@@ -16,8 +16,8 @@ struct MonthModel: Identifiable {
 }
 
 let arrayMonth: [MonthModel] = [
-    MonthModel(picto: "feu", value: 200, type: "Calories", color: .violet),
-    MonthModel(picto: "repas", value: 2, type: "Repas enregistrés", color: .vert),
-    MonthModel(picto: "light", value: 100, type: "Calories brulées", color: .rose),
-    MonthModel(picto: "sport", value: 10, type: "Entrainements", color: .bleu)
+    MonthModel(picto: "fire", value: 2020, type: "Calories", color: .violet),
+    MonthModel(picto: "repas", value: 38, type: "Repas ajoutés", color: .vert),
+    MonthModel(picto: "light", value: 1700, type: "Calories brulées", color: .rose),
+    MonthModel(picto: "sport", value: 16, type: "Entrainements", color: .bleu)
 ]

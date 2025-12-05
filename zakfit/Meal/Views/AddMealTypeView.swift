@@ -17,10 +17,9 @@ struct AddMealTypeView: View {
     
     @Environment(AppState.self) private var appState
     @Environment(\.dismiss) private var dismiss
-    @State var viewModel : MealViewModel
+    @Bindable var viewModel: MealViewModel
     
     @State private var selectedMealType: MealType? = nil
-    @State private var createdMealID: UUID? = nil
     @State private var navigateToMealView = false
     
     var onMealSaved: (() -> Void)? = nil
@@ -28,10 +27,24 @@ struct AddMealTypeView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .center) {
-  
+                
+                //CLOSE MODAL
+                Button{
+                    dismiss()
+                }label: {
+                    HStack{
+                        Spacer()
+                        Image("close")
+                            .resizable()
+                            .frame(width: 35, height: 35)
+                    }
+                }
+                .padding(.top, 10)
+                
                 Text("Sélectionner un type \nde repas")
                     .font(.custom("Parkinsans-SemiBold", size: 25))
                     .padding(.bottom, 40)
+                    .padding(.top, 20)
                     .multilineTextAlignment(.center)
                 
                 LazyVGrid(columns: columns, spacing: 12) {
@@ -63,21 +76,8 @@ struct AddMealTypeView: View {
                     }
                 }
                 
-                //BUTTON
                 Button {
-                    Task {
-                        guard let token = appState.token,
-                              let type = selectedMealType?.name
-                        else {
-                            return print("error: Datas invalid")
-                        }
-                        
-                        // ADD API
-                        if let meal = await viewModel.sendCreateMeal(token: token, type: type) {
-                            createdMealID = meal.id
-                            navigateToMealView = true
-                        }
-                    }
+                    navigateToMealView = true
                 } label: {
                     ZStack {
                         Rectangle()
@@ -91,26 +91,27 @@ struct AddMealTypeView: View {
                     .padding(.top, 15)
                 }
                 .disabled(selectedMealType == nil)
+                
+                Spacer()
             }
             .padding(.horizontal, 17)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.white)
             .navigationDestination(isPresented: $navigateToMealView) {
-                            if let mealID = createdMealID, let mealType = selectedMealType {
-                                MealView(
-                                    viewModel: viewModel,
-                                    mealID: mealID,
-                                    mealType: mealType,
-                                    onSave: {
-                                        dismiss()
-                                        onMealSaved?()
-                                    }
-                                )
-                            }
+                if let mealType = selectedMealType {
+                    MealView(
+                        viewModel: viewModel,
+                        mealType: mealType,
+                        onSave: {
+                            dismiss()
+                            onMealSaved?()
                         }
-                    }
+                    )
                 }
             }
+        }
+    }
+}
 
 #Preview {
     AddMealTypeView(viewModel: MealViewModel())

@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct WeekView: View {
+    
+    @Environment(AppState.self) var appState
+    
     var body: some View {
         VStack{
             Text("Date")
-                .font(.custom("Parkinsans-Medium", size: 25))
+                .font(.custom("Parkinsans-Medium", size: 20))
                 .padding(.bottom, 20)
         }
     }
@@ -19,4 +22,5 @@ struct WeekView: View {
 
 #Preview {
     WeekView()
+        .environment(AppState())
 }

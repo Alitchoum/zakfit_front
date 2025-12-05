@@ -127,7 +127,7 @@ struct AddActivityView : View {
                 .padding(.horizontal, 17)
                 .padding(.top, 20)
             }
-            .alert("Activité ajoutée avec succès!", isPresented: $showAlert) {
+            .alert("Activité ajoutée avec succès 💪!", isPresented: $showAlert) {
                 Button("OK", role: .cancel) {
                     dismiss()
                 }

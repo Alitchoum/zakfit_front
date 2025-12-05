@@ -16,38 +16,20 @@ struct NutriGoalView: View {
     let maxLargeur: CGFloat = 300
     
     //CALORIES
-    var currentCalories: Double {
-        Double(mealViewModel.calculTotal(type: "Calories")) ?? 0
-    }
+    var currentCalories: Double {Double(mealViewModel.calculTotal(type: "Calories")) ?? 0}
+    var caloriesTarget: Double {nutriViewModel.nutriGoal?.caloriesTarget ?? 0}
     
-    var caloriesTarget: Double {
-        nutriViewModel.nutriGoal?.caloriesTarget ?? 1
-    }
    //PROTEINS
-    var currentProteins: Double {
-        Double(mealViewModel.calculTotal(type: "Proteines")) ?? 0    }
-    
-    var proteinsTarget: Double {
-        nutriViewModel.nutriGoal?.proteinsTarget ?? 1
-    }
+    var currentProteins: Double { Double(mealViewModel.calculTotal(type: "Protéines")) ?? 0}
+    var proteinsTarget: Double {nutriViewModel.nutriGoal?.proteinsTarget ?? 0}
     
     //FATS
-    var currentFats: Double {
-        Double(mealViewModel.calculTotal(type: "Lipides")) ?? 0
-    }
-     
-     var fatsTarget: Double {
-         nutriViewModel.nutriGoal?.fatsTarget ?? 1
-     }
+    var currentFats: Double {Double(mealViewModel.calculTotal(type: "Lipides")) ?? 0}
+     var fatsTarget: Double { nutriViewModel.nutriGoal?.fatsTarget ?? 0}
     
     //CARBS
-    var currentCarbs: Double {
-        Double(mealViewModel.calculTotal(type: "Glucides")) ?? 0
-    }
-     
-     var carbsTarget: Double {
-         nutriViewModel.nutriGoal?.carbsTarget ?? 1
-     }
+    var currentCarbs: Double { Double(mealViewModel.calculTotal(type: "Glucides")) ?? 0 }
+     var carbsTarget: Double { nutriViewModel.nutriGoal?.carbsTarget ?? 0 }
     
     var body: some View {
         
@@ -57,30 +39,30 @@ struct NutriGoalView: View {
                     .font(.custom("Parkinsans-SemiBold", size: 16))
                 
                 //BLOC CALORIES
-                VStack(spacing: 20){
-                    HStack {
-                        Text("Calories / jour")
-                            .font(.system(size: 16))
-                        Spacer()
-                        Text(" \(String(format: "%.0f",currentCalories))g / \(String(format: "%.0f",caloriesTarget))g")
-                            .font(.system(size: 16))
+                    VStack(spacing: 20){
+                        HStack {
+                            Text("Calories / jour")
+                                .font(.system(size: 16))
+                            Spacer()
+                            Text(" \(String(format: "%.0f",currentCalories))g / \(String(format: "%.0f",caloriesTarget))g")
+                                .font(.system(size: 16))
+                        }
+                        // PROGRESS BAR
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 15)
+                                .foregroundColor(.white)
+                                .frame(height: 20)
+                            RoundedRectangle(cornerRadius: 15)
+                                .foregroundColor(.violet)
+                                .frame(width: nutriViewModel.progressBar(current: currentCalories, target: caloriesTarget , maxWidth: maxLargeur), height: 20)
+                        }
                     }
-                    // PROGRESS BAR
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 15)
-                            .foregroundColor(.white)
-                            .frame(height: 20)
-                        RoundedRectangle(cornerRadius: 15)
-                            .foregroundColor(.violet)
-                            .frame(width: nutriViewModel.progressBar(current: currentCalories, target: caloriesTarget , maxWidth: maxLargeur), height: 20)
-                    }
-                }
                 
                 //BLOC PROTEINES
                 if nutriViewModel.nutriGoal?.proteinsTarget != nil {
                     VStack(spacing: 20){
                         HStack {
-                            Text("Calories / jour")
+                            Text("Proteines / jour")
                                 .font(.system(size: 16))
                             Spacer()
                             Text("\(String(format: "%.0f", currentProteins))g / \(String(format: "%.0f", proteinsTarget))g")

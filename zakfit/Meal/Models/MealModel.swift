@@ -13,6 +13,7 @@ struct MealModel: Identifiable {
     var type: String
     var value: Double
     var color : Color
+    var picto : String
 }
 
 //VIEW MY MEALS
@@ -24,3 +25,4 @@ struct MyMealsModel: Identifiable {
 }
 
 let colorArray: [Color] = [.vert, .bleu, .rose, .violet]
+

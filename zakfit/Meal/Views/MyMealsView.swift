@@ -26,7 +26,8 @@ struct MyMealsView: View {
             VStack{
                 Text("Mes repas")
                     .font(.custom("Parkinsans-SemiBold", size: 24))
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 20)
+                    .padding(.top, 30)
                 VStack(alignment: .leading, spacing: 15){
                     
                     Text("Total jour")
@@ -53,14 +54,16 @@ struct MyMealsView: View {
                     
                     Text("Repas")
                         .font(.custom("Parkinsans-Medium", size: 20))
+                    
                     ScrollView(.vertical, showsIndicators: false){
                         if viewModel.meals.isEmpty {
-                            NavigationLink(destination: AddMealTypeView(viewModel: MealViewModel())){
+                            NavigationLink(destination: AddMealTypeView(viewModel: viewModel)){
                                 ZStack{
                                     Rectangle()
                                         .frame(width: 368, height: 112)
                                         .foregroundColor(.gris)
                                         .cornerRadius(15)
+                                    
                                     HStack(spacing:35){
                                         Image("plus")
                                             .resizable()
@@ -74,7 +77,9 @@ struct MyMealsView: View {
                         } else {
                             VStack{
                                 ForEach(viewModel.meals){ meal in
-                                    MealCardView(meal: meal)
+                                    NavigationLink(destination: MealDetailView(viewModel: viewModel, mealID: meal.id)){
+                                        MealCardView(meal: meal)
+                                    }
                                 }
                             }
                         }

@@ -37,6 +37,7 @@ struct MeasuresView: View {
                         .cornerRadius(15)
                         .disableAutocorrection(true)
                         .textInputAutocapitalization(.never)
+                        .keyboardType(.numberPad)
                         .onChange(of: weightText) { _ , newText in
                             let onlyNumber = newText.filter{$0.isNumber }
                             if newText != onlyNumber {
@@ -68,6 +69,8 @@ struct MeasuresView: View {
                         .cornerRadius(15)
                         .disableAutocorrection(true)
                         .textInputAutocapitalization(.never)
+                        .keyboardType(.numberPad)
+                    
                         .onChange(of: sizeText) { _ , newText in
                             let onlyNumber = newText.filter{$0.isNumber}
                             if newText != onlyNumber {
@@ -86,8 +89,6 @@ struct MeasuresView: View {
                 }
             }
         }
-        //.background(.violetC)
-        //.padding(.horizontal, 17)
     }
 
 

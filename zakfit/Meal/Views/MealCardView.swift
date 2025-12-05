@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MealCardView: View {
     
+    @Environment(AppState.self) private var appState
     var meal : MealResponseDTO?
     var typeSelected : String = ""
     
@@ -42,7 +43,9 @@ struct MealCardView: View {
                     .font(.custom("Parkinsans-SemiBold", size: 16 ))
                 Spacer()
                 VStack{
-                    Image("fire-fill")
+                    Image("flamme-fill")
+                        .resizable()
+                        .frame(width: 13, height: 16)
                     Text("\(Int(meal?.totalCalories ?? 0)) Kcls")
                 }
                 .padding(.trailing, 20)
@@ -51,7 +54,6 @@ struct MealCardView: View {
         .frame(maxWidth: .infinity)
         .frame(height: 100)
     }
-
 }
 
 #Preview {

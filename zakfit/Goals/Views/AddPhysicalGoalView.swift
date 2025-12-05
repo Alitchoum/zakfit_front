@@ -32,13 +32,13 @@ struct AddPhysicalGoalView: View {
                 Image("activity")
                     .resizable()
                     .frame(width: 79, height: 79)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 15)
                 
                 //DESCRIPTION
-                Text("is a long established fact that a reader will be distracted.")
+                Text("Restez motivée grâce à un suivi simple et clair de vos objectifs sportifs.")
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 20)
                 
                 //CATEGORY
                 HStack{

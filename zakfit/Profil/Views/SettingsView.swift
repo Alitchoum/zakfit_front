@@ -10,9 +10,11 @@ import SwiftUI
 struct SettingsView: View {
     
     @Environment(AppState.self) var appState
-    @State private var notificationsOn: Bool = false //Ajouter la logique!
-    @State var MPD: String = "Mot de passe"
-    @State var showMPD: Bool = false
+    @Environment(\.dismiss) private var dismiss
+    @State private var notificationsOn = false
+    @State var MPD  = ""
+    @State var showMPD = false
+    @State var showAlert = false
     
     var body: some View {
         VStack(spacing : 15){
@@ -26,9 +28,7 @@ struct SettingsView: View {
                 Text("Notifications")
             }
             .tint(.violet)
-            
-            // MARK: - FORMULAIRE
-            
+
             //FIRST NAME
             TextField("Prénom", text: Binding(
                 get: { appState.user?.firstName ?? "Vide" },
@@ -113,7 +113,7 @@ struct SettingsView: View {
                 TextField("taille/cm", text: Binding(
                     get: {
                         if let size = appState.user?.size {
-                        return String(size)
+                            return String(size)
                         } else {
                             return "Vide"
                         }},
@@ -126,12 +126,49 @@ struct SettingsView: View {
                 .disableAutocorrection(true)
                 Text("cm")
             }
+            //OBJECTIVE
+            HStack{
+                TextField("Votre objectif", text: Binding(
+                    get: { if let weight = appState.user?.objective {
+                        return String(weight)
+                    } else {
+                        return "Vide"
+                    }},
+                    set: { appState.user?.objective = $0 }
+                ))
+                .padding(.horizontal, 20)
+                .frame(height: 50)
+                .background(.gris)
+                .cornerRadius(15)
+                .disableAutocorrection(true)
+            }
             
-            //AJOUTER MENU DEROULANT ??
-
             //MODIFIER
             Button{
-                //logique
+                Task {
+                    guard let token = appState.token else { return }
+                    
+                    let data = UpdateUserDTO(
+                        firstName: appState.user?.firstName,
+                        lastName: appState.user?.lastName,
+                        email: appState.user?.email,
+                        password: MPD.isEmpty ? nil : MPD,
+                        weight: appState.user?.weight,
+                        size: appState.user?.size,
+                        objective: appState.user?.objective
+                    )
+                    
+                    do {
+                        let updatedUser = try await UserService.updateUser(token: token, updateData: data)
+                        
+                        await MainActor.run {
+                            appState.user = updatedUser
+                        }
+                        
+                    } catch {
+                        print("Error update profile")
+                    }
+                }
             } label: {
                 ZStack(alignment: .center) {
                     Rectangle()
@@ -145,6 +182,11 @@ struct SettingsView: View {
                 .frame(height: 50)
             }
             .padding(.top, 30)
+            .alert("Modifications enregistrées 👌​!", isPresented: $showAlert) {
+                Button("OK", role: .cancel) {
+                    dismiss()
+                }
+            }
             
             //DECONNEXION
             Button{

@@ -91,7 +91,7 @@ struct AddNutriGoalView: View {
             .padding(.horizontal, 17)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.white)
-            .sheet(isPresented: $showPersoGoal) {
+            .sheet(isPresented: $showPersoGoal ) {
                 PersoNutiGoal(
                     viewModel: viewModel,
                     onSave: {
@@ -99,6 +99,7 @@ struct AddNutriGoalView: View {
                         dismiss()
                     }
                 )
+                .presentationDragIndicator(.visible)
             }
     }
 }

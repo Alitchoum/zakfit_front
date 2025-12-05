@@ -15,6 +15,16 @@ struct LoginResponse: Codable {
     let user: User
 }
 
+struct UpdateUserDTO: Codable {
+    let firstName: String?
+    let lastName: String?
+    let email: String?
+    let password: String?
+    let weight: Int?
+    let size: Int?
+    let objective: String?
+}
+
 final class UserService {
     
     //Recupere l'user connecté
@@ -66,11 +76,7 @@ final class UserService {
 
         guard (200..<300).contains(httpResponse.statusCode) else {
             let message = String(data: data, encoding: .utf8) ?? "Erreur serveur"
-            throw NSError(
-                domain: "",
-                code: httpResponse.statusCode,
-                userInfo: [NSLocalizedDescriptionKey: message]
-            )
+            throw NSError(domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: message])
         }
         
         let decoder = JSONDecoder()
@@ -79,4 +85,35 @@ final class UserService {
         
         return loginResponse
     }
-}
+    
+    static func updateUser(token: String, updateData: UpdateUserDTO) async throws -> User {
+        
+        guard let url = URL(string: "http://127.0.0.1:8080/users/profile") else {
+                   throw URLError(.badURL)
+               }
+
+               var request = URLRequest(url: url)
+               request.httpMethod = "PATCH"
+               request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+               request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+               request.httpBody = try JSONEncoder().encode(updateData)
+
+               let (responseData, response) = try await URLSession.shared.data(for: request)
+
+           guard let httpResponse = response as? HTTPURLResponse else {
+               throw URLError(.badServerResponse)
+           }
+
+           guard (200..<300).contains(httpResponse.statusCode) else {
+               let message = String(data: responseData, encoding: .utf8) ?? "Erreur inconnue"
+               throw NSError(
+                   domain: "", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: message])
+           }
+               let decoder = JSONDecoder()
+               decoder.dateDecodingStrategy = .iso8601
+
+               return try decoder.decode(User.self, from: responseData)
+           }
+    }
+
